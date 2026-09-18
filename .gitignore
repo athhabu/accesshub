@@ -8,3 +8,6 @@ npm-debug.log*
 
 .vscode/
 .idea/
+
+scratch/
+stitch_accesshub_employee_portal/
