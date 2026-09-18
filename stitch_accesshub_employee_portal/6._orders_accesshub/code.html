@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base { html, body { margin: 0; padding: 0; } body { overscroll-behavior: none; } main > :first-child { margin-top: 0 !important; } main > :last-child { margin-bottom: 0 !important; } } ::-webkit-scrollbar { display: none; }</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "on-tertiary-fixed-variant": "#653e00", "surface-bright": "#f8f9ff", "inverse-on-surface": "#eaf1ff", "surface-container-highest": "#d3e4fe", "secondary-container": "#6cf8bb", "on-secondary": "#ffffff", "on-secondary-fixed-variant": "#005236", "primary-container": "#4f46e5", "on-tertiary-container": "#ffd4a4", "on-primary-fixed-variant": "#3323cc", "secondary-fixed": "#6ffbbe", "error": "#ba1a1a", "on-tertiary": "#ffffff", "surface-container-high": "#dce9ff", "on-primary": "#ffffff", "error-container": "#ffdad6", "surface-container": "#e5eeff", "on-error": "#ffffff", "on-surface": "#0b1c30", "on-surface-variant": "#464555", "outline-variant": "#c7c4d8", "inverse-primary": "#c3c0ff", "on-primary-fixed": "#0f0069", "surface": "#f8f9ff", "tertiary-fixed-dim": "#ffb95f", "surface-tint": "#4d44e3", "tertiary-container": "#885500", "on-secondary-fixed": "#002113", "tertiary": "#684000", "surface-variant": "#d3e4fe", "tertiary-fixed": "#ffddb8", "on-error-container": "#93000a", "on-primary-container": "#dad7ff", "secondary": "#006c49", "surface-container-low": "#eff4ff", "primary-fixed-dim": "#c3c0ff", "primary": "#3525cd", "outline": "#777587", "secondary-fixed-dim": "#4edea3", "on-tertiary-fixed": "#2a1700", "primary-fixed": "#e2dfff", "background": "#f8f9ff", "inverse-surface": "#213145", "surface-container-lowest": "#ffffff", "on-secondary-container": "#00714d", "surface-dim": "#cbdbf5", "on-background": "#0b1c30" }, "borderRadius": { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" }, "spacing": { "gutter": "1.5rem", "space-xl": "2rem", "space-lg": "1.5rem", "space-xs": "0.25rem", "margin-mobile": "1rem", "space-md": "1rem", "margin": "2rem", "gutter-mobile": "1rem", "space-sm": "0.5rem" }, "fontFamily": { "label-sm": [ "Inter" ], "headline-md": [ "Inter" ], "title-md": [ "Inter" ], "display-lg": [ "Inter" ], "display-lg-mobile": [ "Inter" ], "label-lg": [ "Inter" ], "headline-lg-mobile": [ "Inter" ], "headline-lg": [ "Inter" ], "headline-sm": [ "Inter" ], "body-sm": [ "Inter" ], "body-lg": [ "Inter" ], "label-md": [ "Inter" ], "body-md": [ "Inter" ] }, "fontSize": { "label-sm": [ "11px", { "lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "600" } ], "headline-md": [ "24px", { "lineHeight": "32px", "letterSpacing": "-0.015em", "fontWeight": "600" } ], "title-md": [ "16px", { "lineHeight": "24px", "letterSpacing": "-0.005em", "fontWeight": "600" } ], "display-lg": [ "36px", { "lineHeight": "44px", "letterSpacing": "-0.025em", "fontWeight": "700" } ], "display-lg-mobile": [ "28px", { "lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "700" } ], "label-lg": [ "14px", { "lineHeight": "20px", "letterSpacing": "0em", "fontWeight": "500" } ], "headline-lg-mobile": [ "24px", { "lineHeight": "32px", "letterSpacing": "-0.015em", "fontWeight": "600" } ], "headline-lg": [ "30px", { "lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "600" } ], "headline-sm": [ "20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" } ], "body-sm": [ "12px", { "lineHeight": "16px", "letterSpacing": "0.005em", "fontWeight": "400" } ], "body-lg": [ "16px", { "lineHeight": "24px", "letterSpacing": "0em", "fontWeight": "400" } ], "label-md": [ "12px", { "lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "500" } ], "body-md": [ "14px", { "lineHeight": "20px", "letterSpacing": "0em", "fontWeight": "400" } ] } } } };</script></head><body class="bg-surface font-body-md text-body-md text-on-surface antialiased"><aside class="fixed left-0 top-0 h-full w-64 bg-surface-container-lowest border-r border-outline-variant/30 z-50 flex flex-col justify-between shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="flex flex-col"><div class="h-16 px-space-md flex items-center gap-space-sm border-b border-outline-variant/20"><img alt="AccessHub Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1X3jhjS9-6MkWq15ce5iRRmUTYMpjAWR6DwpNNe9814D8E0abqz-6xADv_oIOqbW2nY77UxUdpOb6RsiYj33AWahp6qsUXqgVqbWVXkZP_lz7VFephzqYHrcZPGxcnm2DZ6UqVz4ilHAf2cTMKXpv8JXKC3NWuoHug_dVZxM95ofoVUZUr-OG_IFGDao6P-cDGak6vF3yu0NeyIfYoCdikj6Np1HIk-7sEOJejF1gr23_V6dttF-UY"/><span class="font-title-md text-title-md text-primary tracking-tight font-bold">AccessHub</span></div><div class="px-space-md pt-space-md pb-space-xs"><span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant font-semibold">Menu</span></div><nav class="flex flex-col gap-1 px-space-sm" data-active-classes="bg-surface-container text-primary font-semibold rounded-lg"><a class="flex items-center gap-3 px-3 py-2 rounded-lg font-label-lg text-label-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" data-path="dashboard" href="#"><span class="material-symbols-outlined text-[20px]">grid_view</span>Dashboard</a><a class="flex items-center gap-3 px-3 py-2 rounded-lg font-label-lg text-label-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" data-path="my-profile" href="#"><span class="material-symbols-outlined text-[20px]">person</span>My Profile</a><a class="flex items-center gap-3 px-3 py-2 rounded-lg font-label-lg text-label-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" data-path="team" href="#"><span class="material-symbols-outlined text-[20px]">groups</span>Team</a><a class="flex items-center gap-3 px-3 py-2 rounded-lg font-label-lg text-label-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" data-path="documents" href="#"><span class="material-symbols-outlined text-[20px]">description</span>Documents</a><a aria-current="page" class="flex items-center gap-3 px-3 py-2 transition-colors bg-surface-container text-primary font-semibold rounded-lg" data-path="orders" href="#"><span class="material-symbols-outlined text-[20px]">shopping_bag</span>Orders</a><a class="flex items-center gap-3 px-3 py-2 rounded-lg font-label-lg text-label-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" data-path="settings" href="#"><span class="material-symbols-outlined text-[20px]">settings</span>Settings</a></nav></div><div class="p-space-sm border-t border-outline-variant/20 flex flex-col gap-1"><a class="flex items-center gap-3 px-3 py-2 rounded-lg font-label-lg text-label-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" href="#"><span class="material-symbols-outlined text-[20px]">help</span>Quick Help &amp; Docs</a><div class="flex items-center justify-between px-3 py-2 rounded-lg bg-surface-container-low text-on-surface mt-1"><div class="flex items-center gap-2 overflow-hidden"><span class="w-2 h-2 rounded-full bg-secondary shrink-0"></span><span class="font-label-sm text-label-sm truncate">Acme Corp (Prod)</span></div><span class="material-symbols-outlined text-[16px] text-on-surface-variant">unfold_more</span></div></div></aside><div class="pl-64"><header class="fixed top-0 left-64 right-0 h-16 bg-surface-container-lowest/90 backdrop-blur-md border-b border-outline-variant/20 z-40 px-space-lg flex items-center justify-between shadow-[0_1px_8px_rgba(0,0,0,0.02)]"><div class="flex items-center gap-space-lg flex-1 max-w-2xl"><div class="hidden md:flex items-center gap-2 font-label-md text-label-md text-on-surface-variant"><span class="hover:text-on-surface cursor-pointer transition-colors">Enterprise</span><span class="text-outline-variant">/</span><span class="text-on-surface font-semibold">Workspace</span></div><div class="relative flex-1"><span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[18px]">search</span><input class="w-full h-[38px] pl-9 pr-4 rounded-lg bg-surface-container-low border border-outline-variant/40 font-body-sm text-body-sm text-on-surface placeholder:text-on-surface-variant/70 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/15 transition-all" placeholder="Search documents, employees, orders..." type="text"/></div></div><div class="flex items-center gap-space-md"><button class="relative p-2 rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" type="button"><span class="material-symbols-outlined text-[22px]">notifications</span><span class="absolute top-1.5 right-1.5 w-2 h-2 bg-error rounded-full"></span></button><div class="h-6 w-[1px] bg-outline-variant/30"></div><div class="flex items-center gap-3 pl-1 cursor-pointer group"><img alt="Profile" class="w-8 h-8 rounded-full object-cover ring-1 ring-outline-variant/30" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCpJDjxuFZCjMIesaSgejwYTlnZjwa2UBcxxbdvvUzBwGuzH3QCkOLYb5p9S_26p2hJBrPN0MvHTu0yMGOUC7PrtT3nfzV7BurwcRzWTkPygCU0A3rr6nHqsg57fI4RcWYhZBjyg-3EMR_gAhJUmkWYLBgs_1e6ls0u7817rHRZRzGRCNvIvoYd0kJLTEZaqVl2dQzQxnxbUd4srGVT_DnYuZHP2eYPeMyaIQj2s-J-KjEpX-7wc6g"/><div class="hidden sm:flex flex-col text-left"><span class="font-label-lg text-label-lg text-on-surface font-semibold group-hover:text-primary transition-colors leading-tight">Alex Mercer</span><span class="font-label-sm text-label-sm text-on-surface-variant leading-tight">Engineering Lead</span></div><span class="material-symbols-outlined text-[18px] text-on-surface-variant group-hover:text-on-surface transition-colors">expand_more</span></div></div></header><main class="w-full pt-16 bg-surface min-h-screen px-space-lg py-space-lg"><div class="flex flex-col w-full">
+<!-- Top Command & Action Bar -->
+<div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-space-md mb-space-lg">
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs text-primary font-label-sm text-label-sm uppercase tracking-wider mb-1">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+<span>Corporate Procurement • Employee Portal</span>
+</div>
+<h1 class="font-display-lg text-display-lg text-on-surface tracking-tight">My Orders &amp; Hardware Requisitions</h1>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1 max-w-2xl">
+        Track IT equipment requests, software license allocations, and corporate procurement orders.
+      </p>
+</div>
+<div class="flex items-center gap-space-sm self-start lg:self-center">
+<button class="h-[38px] px-4 rounded-lg bg-surface-container text-on-surface hover:bg-surface-container-high transition-colors font-label-lg text-label-lg flex items-center gap-2 shadow-sm" id="exportCsvBtn" type="button">
+<span class="material-symbols-outlined text-[18px]">download</span>
+        Export Report
+      </button>
+<button class="h-[38px] px-4 rounded-lg bg-primary text-on-primary hover:bg-on-primary-fixed-variant transition-all font-label-lg text-label-lg flex items-center gap-2 shadow-md hover:shadow-lg" id="openNewReqModal" type="button">
+<span class="material-symbols-outlined text-[20px]">add</span>
+        + Create New Requisition
+      </button>
+</div>
+</div>
+<!-- KPI Metric Overview Cards -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-space-md mb-space-lg">
+<!-- Card 1: Total Requisitions -->
+<div class="relative overflow-hidden bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col justify-between group hover:shadow-md transition-shadow">
+<div class="flex items-start justify-between">
+<div>
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant font-semibold">Total Requisitions</span>
+<div class="flex items-baseline gap-2 mt-1">
+<span class="font-display-lg text-display-lg text-on-surface font-bold">4</span>
+<span class="font-title-md text-title-md text-on-surface-variant font-medium">Active</span>
+</div>
+</div>
+<div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[22px]">inventory_2</span>
+</div>
+</div>
+<div class="mt-4 pt-3 flex items-center justify-between border-t border-surface-container-low">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Allocated Total</span>
+<span class="font-label-lg text-label-lg text-primary font-bold tracking-tight">$1,420.00</span>
+</div>
+</div>
+<!-- Card 2: In Transit / Pending Delivery -->
+<div class="relative overflow-hidden bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col justify-between group hover:shadow-md transition-shadow">
+<div class="flex items-start justify-between">
+<div>
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant font-semibold">In Transit • Delivery</span>
+<div class="flex items-baseline gap-2 mt-1">
+<span class="font-display-lg text-display-lg text-on-surface font-bold">1</span>
+<span class="font-title-md text-title-md text-on-surface-variant font-medium">Shipment</span>
+</div>
+</div>
+<div class="w-10 h-10 rounded-xl bg-secondary-fixed flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-[22px]">local_shipping</span>
+</div>
+</div>
+<div class="mt-4 pt-3 flex items-center justify-between border-t border-surface-container-low">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">ETA: Tomorrow by 10:30 AM</span>
+</div>
+<span class="font-label-sm text-label-sm text-secondary font-semibold">FedEx Priority</span>
+</div>
+</div>
+<!-- Card 3: Awaiting Manager Approval -->
+<div class="relative overflow-hidden bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col justify-between group hover:shadow-md transition-shadow">
+<div class="flex items-start justify-between">
+<div>
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant font-semibold">Awaiting Manager Approval</span>
+<div class="flex items-baseline gap-2 mt-1">
+<span class="font-display-lg text-display-lg text-on-surface font-bold">1</span>
+<span class="font-title-md text-title-md text-tertiary-container font-medium">Pending</span>
+</div>
+</div>
+<div class="w-10 h-10 rounded-xl bg-tertiary-fixed flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined text-[22px]">hourglass_top</span>
+</div>
+</div>
+<div class="mt-4 pt-3 flex items-center justify-between border-t border-surface-container-low">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Reviewer: Marcus Vance</span>
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-medium">Requires Sign-off</span>
+</div>
+</div>
+</div>
+<!-- Filter, Search & Segment Controls -->
+<div class="bg-surface-container-lowest rounded-xl p-space-sm shadow-sm mb-space-lg flex flex-col md:flex-row items-stretch md:items-center justify-between gap-space-sm">
+<!-- Search Bar -->
+<div class="relative flex-1 max-w-md">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[18px]">search</span>
+<input class="w-full h-[38px] pl-9 pr-4 rounded-lg bg-surface-container-low text-on-surface font-body-sm text-body-sm placeholder:text-on-surface-variant/70 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all" id="orderSearchInput" placeholder="Search by Order ID (ORD-XXXX), item name..." type="text"/>
+</div>
+<!-- Status Tabs -->
+<div class="flex items-center overflow-x-auto gap-1 p-1 bg-surface-container-low rounded-lg scrollbar-none">
+<button class="filter-tab active-tab px-3 py-1.5 rounded font-label-sm text-label-sm bg-surface-container-lowest text-primary font-semibold shadow-sm transition-all whitespace-nowrap" data-filter="all" type="button">
+        All Orders (4)
+      </button>
+<button class="filter-tab px-3 py-1.5 rounded font-label-sm text-label-sm text-on-surface-variant hover:text-on-surface transition-all whitespace-nowrap" data-filter="pending" type="button">
+        Pending Approval (1)
+      </button>
+<button class="filter-tab px-3 py-1.5 rounded font-label-sm text-label-sm text-on-surface-variant hover:text-on-surface transition-all whitespace-nowrap" data-filter="approved" type="button">
+        Approved (2)
+      </button>
+<button class="filter-tab px-3 py-1.5 rounded font-label-sm text-label-sm text-on-surface-variant hover:text-on-surface transition-all whitespace-nowrap" data-filter="delivered" type="button">
+        Delivered (1)
+      </button>
+</div>
+<!-- Fiscal Year & Sort -->
+<div class="flex items-center gap-space-xs self-end md:self-auto">
+<div class="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-surface-container-low text-on-surface font-label-sm text-label-sm">
+<span class="text-on-surface-variant font-normal">Fiscal Year:</span>
+<span class="font-semibold">FY2024</span>
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant ml-1">expand_more</span>
+</div>
+<button class="p-2 rounded-lg bg-surface-container-low text-on-surface-variant hover:text-on-surface transition-colors" title="Filter Settings" type="button">
+<span class="material-symbols-outlined text-[18px]">tune</span>
+</button>
+</div>
+</div>
+<!-- Main Split Master-Detail Layout -->
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-space-lg items-start">
+<!-- Orders List Column (7 cols) -->
+<div class="xl:col-span-7 flex flex-col gap-space-md" id="ordersContainer">
+<!-- Order Item 1: ORD-9204 (Active / Selected) -->
+<div class="order-card active-card cursor-pointer bg-surface-container-lowest rounded-xl p-space-md shadow-md transition-all hover:shadow-lg relative overflow-hidden ring-2 ring-primary" data-order="ORD-9204" data-status="approved">
+<div class="absolute left-0 top-0 bottom-0 w-1.5 bg-primary"></div>
+<div class="flex flex-col sm:flex-row sm:items-start justify-between gap-space-sm mb-3">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-xl bg-surface-container-low flex items-center justify-center shrink-0 text-primary">
+<span class="material-symbols-outlined text-[24px]">devices_other</span>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<span class="font-title-md text-title-md text-on-surface font-bold">ORD-9204</span>
+<span class="inline-flex items-center gap-1 font-label-sm text-label-sm px-2.5 py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary shrink-0"></span> Approved
+                </span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Requisitioned on Oct 24, 2024 • Peripherals</span>
+</div>
+</div>
+<div class="text-right sm:self-start">
+<span class="font-headline-sm text-headline-sm text-on-surface font-bold tracking-tight">$189.00</span>
+<div class="font-label-sm text-label-sm text-secondary font-medium">Standard Hardware Grant</div>
+</div>
+</div>
+<div class="bg-surface-container-low/60 rounded-lg p-3 my-2 flex items-center justify-between">
+<div class="flex items-center gap-2 min-w-0 pr-2">
+<span class="material-symbols-outlined text-[18px] text-on-surface-variant shrink-0">package_2</span>
+<p class="font-body-md text-body-md text-on-surface font-medium truncate">Logitech MX Master 3S + Anker 10-in-1 USB-C Hub</p>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant shrink-0">2 items</span>
+</div>
+<div class="flex items-center justify-between pt-2">
+<div class="flex items-center gap-2 font-body-sm text-body-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px] text-secondary">local_shipping</span>
+<span>FedEx Overnight (ETA: Tomorrow, 10:30 AM)</span>
+</div>
+<button class="select-order-btn font-label-sm text-label-sm text-primary font-semibold hover:underline flex items-center gap-1" type="button">
+            View Details
+            <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+</button>
+</div>
+</div>
+<!-- Order Item 2: ORD-9118 -->
+<div class="order-card cursor-pointer bg-surface-container-lowest rounded-xl p-space-md shadow-sm transition-all hover:shadow-md relative overflow-hidden hover:bg-surface-container-low/30" data-order="ORD-9118" data-status="pending">
+<div class="flex flex-col sm:flex-row sm:items-start justify-between gap-space-sm mb-3">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-xl bg-surface-container-low flex items-center justify-center shrink-0 text-tertiary">
+<span class="material-symbols-outlined text-[24px]">terminal</span>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<span class="font-title-md text-title-md text-on-surface font-bold">ORD-9118</span>
+<span class="inline-flex items-center gap-1 font-label-sm text-label-sm px-2.5 py-0.5 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary shrink-0"></span> Pending Approval
+                </span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Requisitioned on Oct 20, 2024 • Software Licenses</span>
+</div>
+</div>
+<div class="text-right sm:self-start">
+<span class="font-headline-sm text-headline-sm text-on-surface font-bold tracking-tight">$450.00</span>
+<div class="font-label-sm text-label-sm text-on-surface-variant font-medium">Engineering Tooling Pool</div>
+</div>
+</div>
+<div class="bg-surface-container-low/60 rounded-lg p-3 my-2 flex items-center justify-between">
+<div class="flex items-center gap-2 min-w-0 pr-2">
+<span class="material-symbols-outlined text-[18px] text-on-surface-variant shrink-0">key</span>
+<p class="font-body-md text-body-md text-on-surface font-medium truncate">JetBrains All Products Pack (1-Year Corporate License)</p>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant shrink-0">Digital Key</span>
+</div>
+<div class="flex items-center justify-between pt-2">
+<div class="flex items-center gap-2 font-body-sm text-body-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px] text-tertiary">person</span>
+<span>Awaiting sign-off from Marcus Vance (EMP-10024)</span>
+</div>
+<button class="select-order-btn font-label-sm text-label-sm text-primary font-semibold hover:underline flex items-center gap-1" type="button">
+            View Details
+            <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+</button>
+</div>
+</div>
+<!-- Order Item 3: ORD-8711 -->
+<div class="order-card cursor-pointer bg-surface-container-lowest rounded-xl p-space-md shadow-sm transition-all hover:shadow-md relative overflow-hidden hover:bg-surface-container-low/30" data-order="ORD-8711" data-status="delivered">
+<div class="flex flex-col sm:flex-row sm:items-start justify-between gap-space-sm mb-3">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-xl bg-surface-container-low flex items-center justify-center shrink-0 text-on-surface-variant">
+<span class="material-symbols-outlined text-[24px]">desktop_windows</span>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<span class="font-title-md text-title-md text-on-surface font-bold">ORD-8711</span>
+<span class="inline-flex items-center gap-1 font-label-sm text-label-sm px-2.5 py-0.5 rounded-full bg-surface-container text-on-surface-variant font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-outline shrink-0"></span> Delivered
+                </span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Requisitioned on Sep 15, 2024 • Display &amp; Hardware</span>
+</div>
+</div>
+<div class="text-right sm:self-start">
+<span class="font-headline-sm text-headline-sm text-on-surface font-bold tracking-tight">$780.00</span>
+<div class="font-label-sm text-label-sm text-on-surface-variant font-medium">Workstation Ergonomics</div>
+</div>
+</div>
+<div class="bg-surface-container-low/60 rounded-lg p-3 my-2 flex items-center justify-between">
+<div class="flex items-center gap-2 min-w-0 pr-2">
+<span class="material-symbols-outlined text-[18px] text-on-surface-variant shrink-0">tv</span>
+<p class="font-body-md text-body-md text-on-surface font-medium truncate">Dell UltraSharp 32" 4K USB-C Hub Monitor (U3223QE)</p>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant shrink-0">1 unit</span>
+</div>
+<div class="flex items-center justify-between pt-2">
+<div class="flex items-center gap-2 font-body-sm text-body-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px] text-secondary">check_circle</span>
+<span>Delivered • SF HQ Reception, Signed by Receptionist</span>
+</div>
+<button class="select-order-btn font-label-sm text-label-sm text-primary font-semibold hover:underline flex items-center gap-1" type="button">
+            View Details
+            <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+</button>
+</div>
+</div>
+<!-- Order Item 4: ORD-8105 -->
+<div class="order-card cursor-pointer bg-surface-container-lowest rounded-xl p-space-md shadow-sm transition-all hover:shadow-md relative overflow-hidden hover:bg-surface-container-low/30" data-order="ORD-8105" data-status="delivered">
+<div class="flex flex-col sm:flex-row sm:items-start justify-between gap-space-sm mb-3">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-xl bg-surface-container-low flex items-center justify-center shrink-0 text-on-surface-variant">
+<span class="material-symbols-outlined text-[24px]">keyboard</span>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<span class="font-title-md text-title-md text-on-surface font-bold">ORD-8105</span>
+<span class="inline-flex items-center gap-1 font-label-sm text-label-sm px-2.5 py-0.5 rounded-full bg-surface-container text-on-surface-variant font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-outline shrink-0"></span> Delivered
+                </span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Requisitioned on Aug 02, 2024 • Peripherals</span>
+</div>
+</div>
+<div class="text-right sm:self-start">
+<span class="font-headline-sm text-headline-sm text-on-surface font-bold tracking-tight">$199.00</span>
+<div class="font-label-sm text-label-sm text-on-surface-variant font-medium">Standard Hardware Grant</div>
+</div>
+</div>
+<div class="bg-surface-container-low/60 rounded-lg p-3 my-2 flex items-center justify-between">
+<div class="flex items-center gap-2 min-w-0 pr-2">
+<span class="material-symbols-outlined text-[18px] text-on-surface-variant shrink-0">dock</span>
+<p class="font-body-md text-body-md text-on-surface font-medium truncate">Apple Magic Keyboard with Touch ID (Space Gray)</p>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant shrink-0">1 unit</span>
+</div>
+<div class="flex items-center justify-between pt-2">
+<div class="flex items-center gap-2 font-body-sm text-body-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px] text-secondary">check_circle</span>
+<span>Delivered • SF HQ Desk 34B</span>
+</div>
+<button class="select-order-btn font-label-sm text-label-sm text-primary font-semibold hover:underline flex items-center gap-1" type="button">
+            View Details
+            <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Order Detail Pane (5 cols) Sticky Desk View -->
+<div class="xl:col-span-5 sticky top-20">
+<div class="bg-surface-container-lowest rounded-xl shadow-md p-space-md flex flex-col gap-space-md" id="detailsPane">
+<!-- Detail Header -->
+<div class="flex items-start justify-between">
+<div>
+<div class="flex items-center gap-2">
+<span class="font-headline-sm text-headline-sm text-on-surface font-bold" id="detailTitle">Requisition Details — #ORD-9204</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">PO Token: PO-2024-ENG-08992 • Authorized Corporate Grant</p>
+</div>
+<span class="inline-flex items-center gap-1.5 font-label-sm text-label-sm px-3 py-1 rounded-full bg-secondary-container text-on-secondary-container font-semibold" id="detailBadge">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span> Approved
+          </span>
+</div>
+<!-- Approver / Requestor Matrix -->
+<div class="grid grid-cols-2 gap-space-sm bg-surface-container-low p-space-sm rounded-lg">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider font-semibold">Requisitioner</span>
+<span class="font-label-lg text-label-lg text-on-surface font-semibold mt-1">Alex Mercer</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">EMP-10482 • Engineering</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">alex.mercer@accesshub.internal</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider font-semibold">Approver</span>
+<span class="font-label-lg text-label-lg text-on-surface font-semibold mt-1">Marcus Vance</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">EMP-10024 • VP of Eng</span>
+<span class="font-body-sm text-body-sm text-secondary flex items-center gap-1 mt-0.5 font-medium">
+<span class="material-symbols-outlined text-[14px]">verified</span> Auto-cleared tier 1
+            </span>
+</div>
+</div>
+<!-- Delivery & Tracking Stepper -->
+<div class="p-space-sm bg-surface-container-low/50 rounded-lg flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm uppercase tracking-wider font-semibold text-on-surface-variant">Courier &amp; Routing</span>
+<span class="font-label-sm text-label-sm text-primary font-mono font-semibold">FEDEX-PRIORITY</span>
+</div>
+<!-- Step Indicators -->
+<div class="grid grid-cols-3 gap-2 py-2">
+<div class="flex flex-col gap-1">
+<div class="h-1.5 w-full bg-secondary rounded-full"></div>
+<span class="font-label-sm text-label-sm text-secondary font-semibold">Ordered</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Oct 24, 09:12</span>
+</div>
+<div class="flex flex-col gap-1">
+<div class="h-1.5 w-full bg-secondary rounded-full"></div>
+<span class="font-label-sm text-label-sm text-secondary font-semibold">Dispatched</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Oct 25, 04:30</span>
+</div>
+<div class="flex flex-col gap-1">
+<div class="h-1.5 w-full bg-surface-container-highest rounded-full"></div>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-medium">Out for Delivery</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Oct 26 (Est.)</span>
+</div>
+</div>
+<div class="flex items-center justify-between text-body-sm pt-1">
+<span class="text-on-surface-variant">Tracking Number:</span>
+<div class="flex items-center gap-1 text-on-surface font-mono font-semibold">
+<span>7892-4910-2210</span>
+<button class="text-primary hover:text-on-primary-fixed-variant" onclick="navigator.clipboard.writeText('7892-4910-2210')" title="Copy tracking code" type="button">
+<span class="material-symbols-outlined text-[16px]">content_copy</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Destination Address -->
+<div class="flex items-start gap-3 p-space-sm rounded-lg bg-surface-container-low/40">
+<span class="material-symbols-outlined text-primary text-[20px] shrink-0 mt-0.5">apartment</span>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm font-semibold uppercase tracking-wider text-on-surface-variant">Destination Facility</span>
+<span class="font-body-md text-body-md text-on-surface font-medium mt-0.5">500 Howard St, Floor 3 Desk 34B</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">San Francisco HQ, CA 94105 • Attention: Alex Mercer</span>
+</div>
+</div>
+<!-- Items Breakout Table -->
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm uppercase tracking-wider font-semibold text-on-surface-variant mb-2">Requisition Itemization</span>
+<div class="divide-y divide-surface-container-low rounded-lg overflow-hidden bg-surface-container-low/30">
+<!-- Item 1 -->
+<div class="p-3 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-surface-container flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined text-[18px]">mouse</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-lg text-label-lg text-on-surface font-medium">Logitech MX Master 3S Wireless Mouse</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">SKU: LOG-MX3S-GRY • Qty: 1</span>
+</div>
+</div>
+<span class="font-label-lg text-label-lg text-on-surface font-semibold">$99.00</span>
+</div>
+<!-- Item 2 -->
+<div class="p-3 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-surface-container flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined text-[18px]">hub</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-lg text-label-lg text-on-surface font-medium">Anker 563 USB-C Docking Station (10-in-1)</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">SKU: ANK-563-10IN1 • Qty: 1</span>
+</div>
+</div>
+<span class="font-label-lg text-label-lg text-on-surface font-semibold">$90.00</span>
+</div>
+<!-- Subtotal & Tax -->
+<div class="p-3 bg-surface-container-low/60 flex flex-col gap-1.5">
+<div class="flex items-center justify-between font-body-sm text-body-sm text-on-surface-variant">
+<span>Subtotal Items</span>
+<span>$189.00</span>
+</div>
+<div class="flex items-center justify-between font-body-sm text-body-sm text-on-surface-variant">
+<span>Corporate Tax &amp; Shipping Exemption</span>
+<span class="text-secondary font-medium">-$0.00 (Exempt)</span>
+</div>
+<div class="flex items-center justify-between font-title-md text-title-md text-on-surface font-bold pt-1 border-t border-surface-container">
+<span>Total Requisition Cost</span>
+<span class="text-primary font-headline-sm text-headline-sm">$189.00</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Action Buttons Footer -->
+<div class="flex flex-col sm:flex-row items-center gap-space-xs pt-2">
+<button class="w-full sm:flex-1 h-[38px] px-3 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface font-label-lg text-label-lg flex items-center justify-center gap-2 transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">receipt_long</span>
+            Download PO Receipt
+          </button>
+<button class="w-full sm:flex-1 h-[38px] px-3 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface font-label-lg text-label-lg flex items-center justify-center gap-2 transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">print</span>
+            Print Summary
+          </button>
+<button class="w-full sm:w-auto h-[38px] px-3 rounded-lg bg-error-container hover:opacity-90 text-on-error-container font-label-lg text-label-lg flex items-center justify-center gap-1 transition-opacity" title="Cancel Order" type="button">
+<span class="material-symbols-outlined text-[18px]">cancel</span>
+            Cancel
+          </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Create Requisition Slide-over / Modal (Hidden by Default) -->
+<div class="fixed inset-0 z-50 bg-inverse-surface/40 backdrop-blur-sm hidden flex items-center justify-center p-4" id="newRequisitionModal">
+<div class="bg-surface-container-lowest rounded-xl max-w-xl w-full p-space-lg shadow-xl relative animate-in fade-in zoom-in-95 duration-150">
+<div class="flex items-center justify-between pb-space-md border-b border-surface-container-low">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-lg bg-primary text-on-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-[20px]">add_shopping_cart</span>
+</div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface font-bold">New Hardware or Software Request</h2>
+</div>
+<button class="p-1 rounded-lg text-on-surface-variant hover:bg-surface-container transition-colors" id="closeModalBtn" type="button">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<form class="flex flex-col gap-space-md pt-space-md" id="newRequisitionForm">
+<div>
+<label class="block font-label-sm text-label-sm font-semibold uppercase text-on-surface-variant mb-1">Requisition Category</label>
+<select class="w-full h-[38px] px-3 rounded-lg bg-surface-container-lowest border border-outline-variant text-on-surface font-body-md text-body-md focus:outline-none focus:ring-2 focus:ring-primary/20">
+<option>Computer Peripherals &amp; Audio</option>
+<option>Software Licenses &amp; SaaS Seats</option>
+<option>Displays &amp; Ergonomics</option>
+<option>Core Workstation (MacBook Pro / ThinkPad)</option>
+</select>
+</div>
+<div>
+<label class="block font-label-sm text-label-sm font-semibold uppercase text-on-surface-variant mb-1">Item Title / Model Number</label>
+<input class="w-full h-[38px] px-3 rounded-lg bg-surface-container-lowest border border-outline-variant text-on-surface font-body-md text-body-md focus:outline-none focus:ring-2 focus:ring-primary/20" placeholder="e.g. Apple Studio Display 27-inch" required="" type="text"/>
+</div>
+<div class="grid grid-cols-2 gap-space-sm">
+<div>
+<label class="block font-label-sm text-label-sm font-semibold uppercase text-on-surface-variant mb-1">Estimated Cost ($USD)</label>
+<input class="w-full h-[38px] px-3 rounded-lg bg-surface-container-lowest border border-outline-variant text-on-surface font-body-md text-body-md focus:outline-none focus:ring-2 focus:ring-primary/20" placeholder="1599.00" required="" type="number"/>
+</div>
+<div>
+<label class="block font-label-sm text-label-sm font-semibold uppercase text-on-surface-variant mb-1">Designated Approver</label>
+<input class="w-full h-[38px] px-3 rounded-lg bg-surface-container text-on-surface-variant font-body-md text-body-md cursor-not-allowed" readonly="" type="text" value="Marcus Vance (VP of Eng)"/>
+</div>
+</div>
+<div>
+<label class="block font-label-sm text-label-sm font-semibold uppercase text-on-surface-variant mb-1">Business Justification</label>
+<textarea class="w-full p-3 rounded-lg bg-surface-container-lowest border border-outline-variant text-on-surface font-body-md text-body-md focus:outline-none focus:ring-2 focus:ring-primary/20" placeholder="Provide work context (e.g. high-resolution UI design, team license renewal)..." rows="3"></textarea>
+</div>
+<div class="flex items-center justify-end gap-space-sm pt-space-sm border-t border-surface-container-low">
+<button class="h-[38px] px-4 rounded-lg bg-surface-container text-on-surface hover:bg-surface-container-high transition-colors font-label-lg text-label-lg" id="cancelModalBtn" type="button">
+            Cancel
+          </button>
+<button class="h-[38px] px-5 rounded-lg bg-primary text-on-primary hover:bg-on-primary-fixed-variant transition-colors font-label-lg text-label-lg font-semibold shadow-sm" type="submit">
+            Submit Requisition
+          </button>
+</div>
+</form>
+</div>
+</div>
+</div>
+<script>
+  // Client-Side Micro-Interactions for Orders Page
+  document.addEventListener('DOMContentLoaded', () => {
+    // 1. Search Filter Logic
+    const searchInput = document.getElementById('orderSearchInput');
+    const orderCards = document.querySelectorAll('.order-card');
+
+    if (searchInput) {
+      searchInput.addEventListener('input', (e) => {
+        const query = e.target.value.toLowerCase().trim();
+        orderCards.forEach(card => {
+          const text = card.textContent.toLowerCase();
+          if (text.includes(query)) {
+            card.style.display = 'block';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      });
+    }
+
+    // 2. Status Filter Tabs
+    const filterTabs = document.querySelectorAll('.filter-tab');
+    filterTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        filterTabs.forEach(t => {
+          t.classList.remove('bg-surface-container-lowest', 'text-primary', 'font-semibold', 'shadow-sm');
+          t.classList.add('text-on-surface-variant');
+        });
+        tab.classList.add('bg-surface-container-lowest', 'text-primary', 'font-semibold', 'shadow-sm');
+        tab.classList.remove('text-on-surface-variant');
+
+        const filter = tab.getAttribute('data-filter');
+        orderCards.forEach(card => {
+          const cardStatus = card.getAttribute('data-status');
+          if (filter === 'all' || cardStatus === filter) {
+            card.style.display = 'block';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      });
+    });
+
+    // 3. Selection of Order Cards to display in the right Detail Pane
+    const orderDataMap = {
+      'ORD-9204': {
+        title: 'Requisition Details — #ORD-9204',
+        badge: '<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span> Approved',
+        badgeClass: 'bg-secondary-container text-on-secondary-container',
+        amount: '$189.00'
+      },
+      'ORD-9118': {
+        title: 'Requisition Details — #ORD-9118',
+        badge: '<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span> Pending Approval',
+        badgeClass: 'bg-tertiary-fixed text-on-tertiary-fixed',
+        amount: '$450.00'
+      },
+      'ORD-8711': {
+        title: 'Requisition Details — #ORD-8711',
+        badge: '<span class="w-1.5 h-1.5 rounded-full bg-outline"></span> Delivered',
+        badgeClass: 'bg-surface-container text-on-surface-variant',
+        amount: '$780.00'
+      },
+      'ORD-8105': {
+        title: 'Requisition Details — #ORD-8105',
+        badge: '<span class="w-1.5 h-1.5 rounded-full bg-outline"></span> Delivered',
+        badgeClass: 'bg-surface-container text-on-surface-variant',
+        amount: '$199.00'
+      }
+    };
+
+    orderCards.forEach(card => {
+      card.addEventListener('click', () => {
+        orderCards.forEach(c => {
+          c.classList.remove('ring-2', 'ring-primary', 'shadow-md');
+          c.classList.add('shadow-sm');
+          const borderIndicator = c.querySelector('.absolute.left-0.top-0.bottom-0');
+          if (borderIndicator) borderIndicator.remove();
+        });
+
+        card.classList.add('ring-2', 'ring-primary', 'shadow-md');
+        card.classList.remove('shadow-sm');
+        
+        // Add left accent bar
+        const bar = document.createElement('div');
+        bar.className = 'absolute left-0 top-0 bottom-0 w-1.5 bg-primary';
+        card.prepend(bar);
+
+        const orderId = card.getAttribute('data-order');
+        const detailObj = orderDataMap[orderId];
+        if (detailObj) {
+          const titleEl = document.getElementById('detailTitle');
+          const badgeEl = document.getElementById('detailBadge');
+          if (titleEl) titleEl.textContent = detailObj.title;
+          if (badgeEl) {
+            badgeEl.className = `inline-flex items-center gap-1.5 font-label-sm text-label-sm px-3 py-1 rounded-full font-semibold ${detailObj.badgeClass}`;
+            badgeEl.innerHTML = detailObj.badge;
+          }
+        }
+      });
+    });
+
+    // 4. Modal Open/Close Controls
+    const openModalBtn = document.getElementById('openNewReqModal');
+    const closeModalBtn = document.getElementById('closeModalBtn');
+    const cancelModalBtn = document.getElementById('cancelModalBtn');
+    const modal = document.getElementById('newRequisitionModal');
+    const reqForm = document.getElementById('newRequisitionForm');
+
+    function openModal() {
+      modal.classList.remove('hidden');
+    }
+    function closeModal() {
+      modal.classList.add('hidden');
+    }
+
+    if (openModalBtn) openModalBtn.addEventListener('click', openModal);
+    if (closeModalBtn) closeModalBtn.addEventListener('click', closeModal);
+    if (cancelModalBtn) cancelModalBtn.addEventListener('click', closeModal);
+
+    if (reqForm) {
+      reqForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        alert('Requisition submitted for supervisor sign-off! (REQ-9340 generated)');
+        closeModal();
+      });
+    }
+
+    // Export CSV Notification
+    const exportBtn = document.getElementById('exportCsvBtn');
+    if (exportBtn) {
+      exportBtn.addEventListener('click', () => {
+        alert('Exporting Requisition Ledger to CSV (4 records)...');
+      });
+    }
+  });
+</script></main></div></body></html>
