@@ -1590,5 +1590,89 @@
       "createdAt": "2026-09-16T09:00:00.000Z",
       "updatedAt": "2026-09-16T09:00:00.000Z"
     }
-  ]
+  ],
+  "securityAssessment": {
+    "checks": {
+      "1": {
+        "status": "pending",
+        "verifiedAt": null
+      },
+      "2": {
+        "status": "pending",
+        "verifiedAt": null
+      },
+      "3": {
+        "status": "pending",
+        "verifiedAt": null
+      },
+      "4": {
+        "status": "pending",
+        "verifiedAt": null
+      },
+      "5": {
+        "status": "pending",
+        "verifiedAt": null
+      },
+      "6": {
+        "status": "pending",
+        "verifiedAt": null
+      },
+      "7": {
+        "status": "pending",
+        "verifiedAt": null
+      },
+      "8": {
+        "status": "pending",
+        "verifiedAt": null
+      },
+      "9": {
+        "status": "pending",
+        "verifiedAt": null
+      },
+      "10": {
+        "status": "pending",
+        "verifiedAt": null
+      },
+      "11": {
+        "status": "pending",
+        "verifiedAt": null
+      },
+      "12": {
+        "status": "pending",
+        "verifiedAt": null
+      },
+      "13": {
+        "status": "pending",
+        "verifiedAt": null
+      },
+      "14": {
+        "status": "pending",
+        "verifiedAt": null
+      },
+      "15": {
+        "status": "pending",
+        "verifiedAt": null
+      },
+      "16": {
+        "status": "pending",
+        "verifiedAt": null
+      },
+      "17": {
+        "status": "pending",
+        "verifiedAt": null
+      },
+      "18": {
+        "status": "pending",
+        "verifiedAt": null
+      },
+      "19": {
+        "status": "pending",
+        "verifiedAt": null
+      },
+      "20": {
+        "status": "pending",
+        "verifiedAt": null
+      }
+    }
+  }
 }

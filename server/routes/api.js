@@ -3,6 +3,7 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const { readDB, writeDB } = require('../db');
 const { generateToken, authenticateToken, requireAdmin } = require('../auth');
+const { CHECKS } = require('../securityAssessment');
 
 function sanitizeUser(user) {
   if (!user) return null;
@@ -1918,6 +1919,127 @@ router.put('/events/:eventId', authenticateToken, (req, res) => {
       updatedAt: event.updatedAt
     }
   });
+});
+
+// -------------------------------------------------------------
+// Security Assessment Endpoints
+// These endpoints support the private /lab-progress training
+// scoreboard. Vulnerability names live exclusively in
+// server/securityAssessment.js and are NEVER sent to the client
+// for pending checks. Verified checks receive the name only
+// through the verify response or subsequent GET (already revealed).
+// -------------------------------------------------------------
+
+const TOTAL_CHECKS = 20;
+
+// Ensure the DB has a valid securityAssessment.checks structure.
+function getOrInitAssessment(db) {
+  if (!db.securityAssessment || !db.securityAssessment.checks) {
+    const checks = {};
+    for (let i = 1; i <= TOTAL_CHECKS; i++) {
+      checks[i] = { status: 'pending', verifiedAt: null };
+    }
+    db.securityAssessment = { checks };
+  }
+  return db.securityAssessment;
+}
+
+// Build the response shape for GET — titles always present;
+// vulnerabilityName included ONLY for already-verified checks.
+function buildAssessmentResponse(db) {
+  const assessment = getOrInitAssessment(db);
+  const responseChecks = {};
+  for (let i = 1; i <= TOTAL_CHECKS; i++) {
+    const stored = assessment.checks[i] || { status: 'pending', verifiedAt: null };
+    const meta = CHECKS[i];
+    responseChecks[i] = {
+      status: stored.status,
+      verifiedAt: stored.verifiedAt || null,
+      title: meta.title
+    };
+    // Reveal vulnerability name only for checks the user has already verified.
+    if (stored.status === 'verified') {
+      responseChecks[i].vulnerabilityName = meta.vulnerability;
+    }
+  }
+  return { checks: responseChecks };
+}
+
+// GET /api/security-assessment
+// Returns status + verifiedAt + title for all checks.
+// vulnerabilityName is included ONLY for verified checks (already revealed).
+// Pending checks receive NO vulnerability name.
+router.get('/security-assessment', authenticateToken, (req, res) => {
+  const db = readDB();
+  res.json(buildAssessmentResponse(db));
+});
+
+// POST /api/security-assessment/:checkId/verify
+// Marks one check verified and returns the revealed vulnerability details
+// for that single check only — used by the frontend snackbar.
+router.post('/security-assessment/:checkId/verify', authenticateToken, (req, res) => {
+  const checkId = parseInt(req.params.checkId, 10);
+  if (isNaN(checkId) || checkId < 1 || checkId > TOTAL_CHECKS) {
+    return res.status(400).json({ error: 'Invalid check ID. Must be 1–20.' });
+  }
+
+  const db = readDB();
+  const assessment = getOrInitAssessment(db);
+  const meta = CHECKS[checkId];
+  const verifiedAt = new Date().toISOString();
+
+  if (assessment.checks[checkId] && assessment.checks[checkId].status === 'verified') {
+    // Already verified — idempotent; return revealed info again
+    return res.json({
+      success: true,
+      checkId,
+      title: meta.title,
+      vulnerability: meta.vulnerability,
+      verifiedAt: assessment.checks[checkId].verifiedAt,
+      assessment: buildAssessmentResponse(db)
+    });
+  }
+
+  assessment.checks[checkId] = { status: 'verified', verifiedAt };
+  writeDB(db);
+
+  res.json({
+    success: true,
+    checkId,
+    title: meta.title,
+    vulnerability: meta.vulnerability,
+    verifiedAt,
+    assessment: buildAssessmentResponse(db)
+  });
+});
+
+// POST /api/security-assessment/reset  (registered before /:checkId/reset)
+// Resets ALL 20 checks to pending. No vulnerability names returned.
+router.post('/security-assessment/reset', authenticateToken, (req, res) => {
+  const db = readDB();
+  const checks = {};
+  for (let i = 1; i <= TOTAL_CHECKS; i++) {
+    checks[i] = { status: 'pending', verifiedAt: null };
+  }
+  db.securityAssessment = { checks };
+  writeDB(db);
+  res.json({ message: 'All checks reset to pending.', assessment: buildAssessmentResponse(db) });
+});
+
+// POST /api/security-assessment/:checkId/reset
+// Resets one check to pending. No vulnerability name returned.
+router.post('/security-assessment/:checkId/reset', authenticateToken, (req, res) => {
+  const checkId = parseInt(req.params.checkId, 10);
+  if (isNaN(checkId) || checkId < 1 || checkId > TOTAL_CHECKS) {
+    return res.status(400).json({ error: 'Invalid check ID. Must be 1–20.' });
+  }
+
+  const db = readDB();
+  const assessment = getOrInitAssessment(db);
+  assessment.checks[checkId] = { status: 'pending', verifiedAt: null };
+  writeDB(db);
+
+  res.json({ message: 'Check reset to pending.', assessment: buildAssessmentResponse(db) });
 });
 
 module.exports = router;

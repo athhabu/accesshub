@@ -1484,6 +1484,15 @@ function readDB() {
       db.events = INITIAL_DATA.events;
       writeDB(db);
     }
+    // Initialize securityAssessment if missing (upgrade migration)
+    if (!db.securityAssessment || !db.securityAssessment.checks) {
+      const checks = {};
+      for (let i = 1; i <= 20; i++) {
+        checks[i] = { status: 'pending', verifiedAt: null };
+      }
+      db.securityAssessment = { checks };
+      writeDB(db);
+    }
     return db;
   } catch (err) {
     console.error('Error reading database:', err);

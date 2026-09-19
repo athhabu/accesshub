@@ -85,7 +85,12 @@ const SidebarComponent = {
         <div class="p-space-sm border-t border-outline-variant/20 flex flex-col gap-1">
           <a class="flex items-center gap-3 px-3 py-2 rounded-lg font-label-lg text-label-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" href="javascript:void(0)" onclick="State.showToast('AccessHub Support Center: support@accesshub.internal', 'help')">
             <span class="material-symbols-outlined text-[20px]">help</span>
-            <span>Quick Help & Docs</span>
+            <span>Quick Help &amp; Docs</span>
+          </a>
+          <!-- Security Assessment Link (training lab) -->
+          <a class="flex items-center gap-3 px-3 py-2 rounded-lg font-label-lg text-label-lg ${currentPath === 'lab-progress' ? 'bg-surface-container text-primary font-semibold' : 'text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface'} transition-colors" href="#/lab-progress">
+            <span class="material-symbols-outlined text-[20px]">security</span>
+            <span>Security Assessment</span>
           </a>
           <div class="flex items-center justify-between px-3 py-2 rounded-lg bg-surface-container-low text-on-surface mt-1 cursor-pointer" onclick="State.showToast('Connected to Acme Corp (Prod) Tenant Gateway')">
             <div class="flex items-center gap-2 overflow-hidden">

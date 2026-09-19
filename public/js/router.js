@@ -10,6 +10,7 @@ const AppRouter = {
     'expenses': ExpensesView,
     'calendar': CalendarView,
     'admin': AdminView,
+    'lab-progress': LabProgressView,
     'settings': {
       async render(user) {
         return `
