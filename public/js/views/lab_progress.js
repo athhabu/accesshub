@@ -433,4 +433,19 @@ const LabProgressView = {
   }
 };
 
+// Listen for auto-detected exploit completion events
+window.addEventListener('lab-check-solved', async () => {
+  if (document.getElementById('lab-progress-root')) {
+    try {
+      LabProgressView._assessmentData = await State.apiFetch('/api/security-assessment');
+      for (let i = 1; i <= 20; i++) {
+        LabProgressView._rerenderCard(i);
+      }
+      LabProgressView._refreshProgress();
+    } catch (e) {
+      console.warn('Failed to auto-refresh lab progress:', e);
+    }
+  }
+});
+
 window.LabProgressView = LabProgressView;

@@ -130,6 +130,48 @@
     <span class="font-body-sm text-body-sm font-medium" id="global-toast-text">Notification message</span>
   </div>
 
+  <!-- Professional Security Assessment Achievement Banner (Juice Shop / PortSwigger Style) -->
+  <div id="lab-solved-banner" class="fixed top-5 left-1/2 -translate-x-1/2 z-[100] transform -translate-y-36 opacity-0 pointer-events-none transition-all duration-500 ease-out max-w-xl w-[92%] sm:w-auto">
+    <div class="flex items-center gap-4 px-5 py-3.5 bg-inverse-surface/95 backdrop-blur-md text-inverse-on-surface rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.35)] border border-secondary-fixed/30 ring-2 ring-secondary-fixed/20 relative overflow-hidden">
+      <!-- Accent indicator bar -->
+      <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-secondary-fixed via-emerald-400 to-secondary-fixed"></div>
+      
+      <!-- Icon badge -->
+      <div class="w-11 h-11 rounded-xl bg-secondary-fixed/20 border border-secondary-fixed/40 flex items-center justify-center shrink-0 text-secondary-fixed">
+        <span class="material-symbols-outlined text-[24px]">verified_user</span>
+      </div>
+
+      <!-- Text content -->
+      <div class="flex-1 min-w-0 pr-2">
+        <div class="flex items-center gap-2">
+          <span class="font-label-sm text-[11px] font-bold tracking-wider text-secondary-fixed uppercase flex items-center gap-1">
+            <span class="material-symbols-outlined text-[14px]">check</span>
+            Vulnerability Verified
+          </span>
+          <span class="text-inverse-on-surface/40 text-[11px]">•</span>
+          <span class="font-label-sm text-[11px] text-inverse-on-surface/70" id="lab-solved-assessment-tag">Access Control Assessment</span>
+        </div>
+        <h4 class="font-title-md text-title-md font-bold text-inverse-on-surface truncate mt-0.5" id="lab-solved-vuln-name">
+          Vulnerability Name
+        </h4>
+        <p class="font-body-sm text-body-sm text-inverse-on-surface/80 truncate" id="lab-solved-check-title">
+          Check Title
+        </p>
+      </div>
+
+      <!-- Action buttons -->
+      <div class="flex items-center gap-2 shrink-0">
+        <a href="#/lab-progress" class="h-8 px-3 rounded-lg bg-secondary-fixed hover:bg-secondary-fixed/90 text-on-secondary-fixed font-label-md text-label-md font-bold transition-all shadow-sm flex items-center gap-1.5 whitespace-nowrap">
+          <span>View Progress</span>
+          <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+        </a>
+        <button type="button" onclick="State.hideLabSolvedBanner()" class="w-8 h-8 rounded-lg text-inverse-on-surface/60 hover:text-inverse-on-surface hover:bg-white/10 flex items-center justify-center transition-colors" title="Dismiss">
+          <span class="material-symbols-outlined text-[18px]">close</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- Scripts -->
   <script src="/js/state.js"></script>
   <script src="/js/components/sidebar.js"></script>

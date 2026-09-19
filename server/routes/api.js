@@ -3,7 +3,7 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const { readDB, writeDB } = require('../db');
 const { generateToken, authenticateToken, requireAdmin } = require('../auth');
-const { CHECKS } = require('../securityAssessment');
+const { CHECKS, recordExploit } = require('../securityAssessment');
 
 function sanitizeUser(user) {
   if (!user) return null;
@@ -203,6 +203,11 @@ router.put('/employees/:id/contact-info', authenticateToken, (req, res) => {
   if (workPhone  !== undefined) target.workPhone  = String(workPhone).trim();
   if (deskLocation !== undefined) target.deskLocation = String(deskLocation).trim();
 
+  // Auto-detect BAC #2: Horizontal Privilege Escalation
+  if (req.user.role !== 'Administrator' && targetId !== req.user.id) {
+    recordExploit(db, 2, req, res);
+  }
+
   writeDB(db);
 
   res.json({
@@ -262,6 +267,11 @@ router.put('/employees/:id/preferences', authenticateToken, (req, res) => {
   if (weeklyDigest !== undefined) target.preferences.weeklyDigest = Boolean(weeklyDigest);
   if (desktopNotifications !== undefined) target.preferences.desktopNotifications = Boolean(desktopNotifications);
 
+  // Auto-detect BAC #8: Cross-User API Modification
+  if (req.user.role !== 'Administrator' && targetId !== req.user.id) {
+    recordExploit(db, 8, req, res);
+  }
+
   writeDB(db);
 
   res.json({
@@ -317,6 +327,12 @@ router.get('/documents/:id', authenticateToken, (req, res) => {
     return res.status(404).json({ error: 'Document not found' });
   }
 
+  // Auto-detect BAC #1: Document Access (IDOR / BOLA)
+  if (req.user.role !== 'Administrator' && doc.ownerId !== req.user.id && doc.category !== 'General') {
+    const result = recordExploit(db, 1, req, res);
+    if (result && result.isNewlyVerified) writeDB(db);
+  }
+
   res.json({ document: doc });
 });
 
@@ -343,6 +359,12 @@ router.get('/documents/:id/download', authenticateToken, (req, res) => {
 
   // INTENTIONAL VULNERABILITY: Missing ownership verification!
   // Neither `doc.ownerId === req.user.id` nor `req.user.role === 'Administrator'` is checked.
+
+  // Auto-detect BAC #6: Unauthorized File Download
+  if (req.user.role !== 'Administrator' && doc.ownerId !== req.user.id && doc.category !== 'General') {
+    const result = recordExploit(db, 6, req, res);
+    if (result && result.isNewlyVerified) writeDB(db);
+  }
 
   const mimeTypes = {
     'PDF': 'application/pdf',
@@ -438,6 +460,11 @@ router.delete('/documents/:id', authenticateToken, (req, res) => {
   // Neither `doc.ownerId === req.user.id` nor `req.user.role === 'Administrator'` is checked.
 
   db.documents.splice(docIndex, 1);
+
+  // Auto-detect BAC #7: Unauthorized File Deletion (after successful deletion)
+  if (req.user.role !== 'Administrator' && doc.ownerId !== req.user.id) {
+    recordExploit(db, 7, req, res);
+  }
 
   db.activity.unshift({
     id: Date.now(),
@@ -608,6 +635,11 @@ const handleOrderCancel = (req, res) => {
   order.cancelledAt = new Date().toISOString();
   order.cancelledBy = req.user.name;
 
+  // Auto-detect BAC #5: Unauthorized Order Cancellation (after cancellation completes)
+  if (req.user.role !== 'Administrator' && order.ownerId !== req.user.id) {
+    recordExploit(db, 5, req, res);
+  }
+
   db.activity.unshift({
     id: Date.now(),
     type: 'order',
@@ -715,6 +747,11 @@ router.patch('/orders/:id/status', authenticateToken, (req, res) => {
   } else if (status === 'Cancelled') {
     order.progress = 'Cancelled';
     order.progressStep = 0;
+  }
+
+  // Auto-detect BAC #9: HTTP Method Authorization Bypass (after PATCH status change completes)
+  if (req.user.role !== 'Administrator' && order.ownerId !== req.user.id) {
+    recordExploit(db, 9, req, res);
   }
 
   writeDB(db);
@@ -857,6 +894,11 @@ router.put('/admin/users/:id', authenticateToken, (req, res) => {
   if (status) user.status = status;
   if (jobTitle) user.jobTitle = jobTitle;
 
+  // Auto-detect BAC #3: Vertical Privilege Escalation
+  if (req.user.role !== 'Administrator') {
+    recordExploit(db, 3, req, res);
+  }
+
   writeDB(db);
 
   res.json({
@@ -879,6 +921,13 @@ router.put('/admin/users/:id', authenticateToken, (req, res) => {
 // GET /api/admin/audit-log and inspect internal administrative audit trails without authorization.
 router.get('/admin/audit-log', authenticateToken, (req, res) => {
   const db = readDB();
+
+  // Auto-detect BAC #4: Forced Browsing / Unprotected Endpoint
+  if (req.user.role !== 'Administrator') {
+    const result = recordExploit(db, 4, req, res);
+    if (result && result.isNewlyVerified) writeDB(db);
+  }
+
   const auditLogs = db.auditLog || [];
   res.json({
     total: auditLogs.length,
@@ -931,6 +980,12 @@ router.get('/reports/employee-summary', authenticateToken, (req, res) => {
   }
 
   const db = readDB();
+
+  // Auto-detect BAC #10: Parameter-Based Authorization Flaw
+  if (req.user.role !== 'Administrator' && accessLevel === 'admin') {
+    const result = recordExploit(db, 10, req, res);
+    if (result && result.isNewlyVerified) writeDB(db);
+  }
 
   const report = db.users.map(u => ({
     empId: u.empId,
@@ -1054,6 +1109,12 @@ router.post('/teams/:id/members', authenticateToken, (req, res) => {
   // is intentionally omitted here for BAC #11.
 
   team.memberIds.push(targetUser.id);
+
+  // Auto-detect BAC #11: Unauthorized Team Membership Modification (after member is added)
+  if (req.user.role !== 'Administrator' && team.managerId !== req.user.id) {
+    recordExploit(db, 11, req, res);
+  }
+
   writeDB(db);
 
   res.json({
@@ -1173,6 +1234,11 @@ router.put('/requests/:requestId/notes/:noteId', authenticateToken, (req, res) =
   note.content = trimmed;
   note.updatedAt = new Date().toISOString();
 
+  // Auto-detect BAC #12: Unauthorized Comment / Note Modification (after note update succeeds)
+  if (req.user.role !== 'Administrator' && requestItem.ownerId !== req.user.id) {
+    recordExploit(db, 12, req, res);
+  }
+
   // Audit trail logging
   if (!db.auditLog) db.auditLog = [];
   db.auditLog.unshift({
@@ -1235,6 +1301,11 @@ router.post('/requests/:requestId/approve', authenticateToken, (req, res) => {
   requestItem.status = 'Approved';
   requestItem.approvedBy = req.user.id;
   requestItem.approvedAt = approvedAt;
+
+  // Auto-detect BAC #14: Unauthorized Approval Action (after approval state transition)
+  if (req.user.role !== 'Administrator' && req.user.id !== requestItem.approverId) {
+    recordExploit(db, 14, req, res);
+  }
 
   // Audit logging: record the approval in the audit system
   if (!db.auditLog) db.auditLog = [];
@@ -1315,6 +1386,11 @@ router.post('/requests/:requestId/reject', authenticateToken, (req, res) => {
     requestItem.rejectionReason = reason.trim();
   }
 
+  // Auto-detect BAC #19: Unauthorized Request Rejection (after rejection state transition)
+  if (req.user.role !== 'Administrator' && req.user.id !== requestItem.approverId) {
+    recordExploit(db, 19, req, res);
+  }
+
   // Audit logging: record the rejection in the audit log
   if (!db.auditLog) db.auditLog = [];
   db.auditLog.unshift({
@@ -1387,6 +1463,12 @@ router.get('/departments/:departmentId/employees', authenticateToken, (req, res)
   const db = readDB();
 
   // VULNERABLE LOGIC: The department-boundary ownership check is intentionally omitted here.
+
+  // Auto-detect BAC #13: Cross-Department Access Control Flaw
+  if (req.user.role !== 'Administrator' && deptName !== req.user.department) {
+    const result = recordExploit(db, 13, req, res);
+    if (result && result.isNewlyVerified) writeDB(db);
+  }
   const employees = db.users
     .filter(u => u.department === deptName)
     .map(u => ({
@@ -1533,6 +1615,11 @@ router.put('/assets/:assetId/assignment', authenticateToken, (req, res) => {
   asset.reassignedBy = req.user.id;
   asset.reassignedAt = reassignedAt;
 
+  // Auto-detect BAC #15: Resource Ownership Transfer Flaw (after reassignment succeeds)
+  if (req.user.role !== 'Administrator' && req.user.id !== asset.managerId) {
+    recordExploit(db, 15, req, res);
+  }
+
   // Audit logging: record asset assignment change
   if (!db.auditLog) db.auditLog = [];
   db.auditLog.unshift({
@@ -1605,6 +1692,11 @@ function handlePasswordChange(targetEmployeeId, req, res) {
   targetUser.passwordHash = bcrypt.hashSync(trimmedPassword, 8);
   targetUser.plainPasswordForLab = trimmedPassword;
   targetUser.passwordChangedAt = new Date().toISOString();
+
+  // Auto-detect BAC #16: Unauthorized Password Change (after password update succeeds)
+  if (req.user.role !== 'Administrator' && targetUser.id !== req.user.id) {
+    recordExploit(db, 16, req, res);
+  }
 
   if (!db.auditLog) db.auditLog = [];
   db.auditLog.unshift({
@@ -1692,6 +1784,11 @@ router.put('/employees/:id/access-profile', authenticateToken, (req, res) => {
   const previousRole = targetUser.assignedRole || targetUser.role;
   targetUser.assignedRole = matchedRole;
 
+  // Auto-detect BAC #17: Unauthorized Role / Permission Assignment (after role mutation succeeds)
+  if (req.user.role !== 'Administrator') {
+    recordExploit(db, 17, req, res);
+  }
+
   // Audit logging: record role change
   if (!db.auditLog) db.auditLog = [];
   db.auditLog.unshift({
@@ -1774,6 +1871,12 @@ router.get('/expenses/:id', authenticateToken, (req, res) => {
   // if (req.user.role !== 'Administrator' && expense.employeeId !== req.user.id) {
   //   return res.status(403).json({ error: 'You are not authorized to view this expense.' });
   // }
+
+  // Auto-detect BAC #18: Unauthorized Expense / Invoice Access
+  if (req.user.role !== 'Administrator' && expense.employeeId !== req.user.id) {
+    const result = recordExploit(db, 18, req, res);
+    if (result && result.isNewlyVerified) writeDB(db);
+  }
 
   res.json({
     expense: {
@@ -1884,6 +1987,11 @@ router.put('/events/:eventId', authenticateToken, (req, res) => {
   }
 
   event.updatedAt = new Date().toISOString();
+
+  // Auto-detect BAC #20: Unauthorized Calendar / Event Modification (after event modification succeeds)
+  if (req.user.role !== 'Administrator' && req.user.id !== event.organizerId) {
+    recordExploit(db, 20, req, res);
+  }
 
   // Audit logging
   if (!db.auditLog) db.auditLog = [];
