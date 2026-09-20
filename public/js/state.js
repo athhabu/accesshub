@@ -136,6 +136,7 @@ const State = {
   _labBannerTimer: null,
   _verifiedCheckIds: new Set(),
   _labWatcherInterval: null,
+  _labWatcherInitialized: false,
 
   showLabSolvedBanner(checkId, title, vulnerability) {
     const banner = document.getElementById('lab-solved-banner');
@@ -213,21 +214,26 @@ const State = {
         const checks = data.checks || {};
 
         // If this is first poll, populate verified set without firing notification
-        if (this._verifiedCheckIds.size === 0) {
+        if (!this._labWatcherInitialized) {
           for (const [idStr, check] of Object.entries(checks)) {
             if (check.status === 'verified') {
               this._verifiedCheckIds.add(Number(idStr));
             }
           }
+          this._labWatcherInitialized = true;
           return;
         }
 
         // Check for any newly verified checks
         for (const [idStr, check] of Object.entries(checks)) {
           const numId = Number(idStr);
-          if (check.status === 'verified' && !this._verifiedCheckIds.has(numId)) {
-            this._verifiedCheckIds.add(numId);
-            this.showLabSolvedBanner(numId, check.title, check.vulnerabilityName);
+          if (check.status === 'verified') {
+            if (!this._verifiedCheckIds.has(numId)) {
+              this._verifiedCheckIds.add(numId);
+              this.showLabSolvedBanner(numId, check.title, check.vulnerabilityName);
+            }
+          } else {
+            this._verifiedCheckIds.delete(numId);
           }
         }
       } catch (err) {
@@ -248,6 +254,7 @@ const State = {
       this._labWatcherInterval = null;
     }
     this._verifiedCheckIds.clear();
+    this._labWatcherInitialized = false;
   }
 };
 
