@@ -147,7 +147,7 @@ const HeaderComponent = {
   handleSearch(query) {
     if (!query || !query.trim()) return;
     const q = encodeURIComponent(query.trim());
-    window.location.hash = `#/team?q=${q}`;
+    window.location.href = `/search?q=${q}`;
   },
 
   toggleUserMenu() {

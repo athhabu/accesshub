@@ -25,7 +25,8 @@ const LabProgressView = {
   },
 
   _buildHTML() {
-    const total = 20;
+    const checksObj = (this._assessmentData && this._assessmentData.checks) ? this._assessmentData.checks : {};
+    const total = Math.max(42, Object.keys(checksObj).length);
     let verifiedCount = 0;
     for (let i = 1; i <= total; i++) {
       if (this._getCheckData(i).status === 'verified') verifiedCount++;
@@ -33,7 +34,7 @@ const LabProgressView = {
     const pct = Math.round((verifiedCount / total) * 100);
     const isComplete = verifiedCount === total;
 
-    // Iterate 1–20; title and vulnerabilityName come from server via _assessmentData
+    // Iterate 1–42; title and vulnerabilityName come from server via _assessmentData
     const checksHTML = Array.from({ length: total }, (_, i) => i + 1).map(id => {
       const checkData = this._getCheckData(id);
       const isPending = checkData.status !== 'verified';
@@ -114,7 +115,7 @@ const LabProgressView = {
         </div>
         <div>
           <p class="font-title-md text-title-md text-secondary font-bold">Security Assessment Complete</p>
-          <p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">All access-control checks have been manually verified.</p>
+          <p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">All access-control and client-side security checks have been manually verified.</p>
         </div>
       </div>` : '';
 
@@ -187,7 +188,7 @@ const LabProgressView = {
             <h2 class="font-headline-sm text-headline-sm text-on-surface font-bold">Reset Security Assessment?</h2>
           </div>
           <p class="font-body-md text-body-md text-on-surface-variant mb-6">
-            This will reset all 20 checks to <strong class="text-on-surface">Pending</strong>. Verified findings and timestamps will be permanently cleared.
+            This will reset all ${total} checks to <strong class="text-on-surface">Pending</strong>. Verified findings and timestamps will be permanently cleared.
           </p>
           <div class="flex items-center justify-end gap-3">
             <button
@@ -360,7 +361,7 @@ const LabProgressView = {
   },
 
   _refreshProgress() {
-    const total = 20;
+    const total = 36;
     let verifiedCount = 0;
     for (let i = 1; i <= total; i++) {
       if (this._getCheckData(i).status === 'verified') verifiedCount++;
@@ -438,7 +439,7 @@ window.addEventListener('lab-check-solved', async () => {
   if (document.getElementById('lab-progress-root')) {
     try {
       LabProgressView._assessmentData = await State.apiFetch('/api/security-assessment');
-      for (let i = 1; i <= 20; i++) {
+      for (let i = 1; i <= 36; i++) {
         LabProgressView._rerenderCard(i);
       }
       LabProgressView._refreshProgress();

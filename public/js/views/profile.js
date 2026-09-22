@@ -105,6 +105,12 @@ const ProfileView = {
                     ${user.empId}
                   </span>
                 </div>
+                <div class="mt-3 flex items-center gap-2">
+                  <a id="employee-profile-link" href="${user.profileLink || '#'}" target="_blank" class="px-3 py-1 rounded-lg bg-surface-container-low hover:bg-surface-container text-primary font-semibold text-xs transition-colors inline-flex items-center gap-1.5 border border-outline-variant/30 shadow-sm">
+                    <span class="material-symbols-outlined text-[15px]">link</span>
+                    <span>Professional Profile</span>
+                  </a>
+                </div>
               </div>
             </div>
 
@@ -139,6 +145,28 @@ const ProfileView = {
                 ${tab}
               </button>
             `).join('')}
+          </div>
+        </div>
+
+        <!-- Professional Bio / About Section -->
+        <div class="rounded-xl bg-surface-container-lowest border border-outline-variant/30 p-space-lg shadow-sm mb-6">
+          <div class="flex items-center justify-between mb-3 pb-3 border-b border-outline-variant/20">
+            <div class="flex items-center gap-2.5">
+              <div class="w-8 h-8 rounded-lg bg-surface-container flex items-center justify-center text-primary">
+                <span class="material-symbols-outlined text-[18px]">person_book</span>
+              </div>
+              <div>
+                <h3 class="font-title-md text-title-md font-bold text-on-surface">About & Professional Bio</h3>
+                <p class="text-xs text-on-surface-variant">Employee summary, core competencies, and team focus</p>
+              </div>
+            </div>
+            <button onclick="ProfileView.openEditModal()" class="text-xs font-semibold text-primary hover:underline flex items-center gap-1">
+              <span class="material-symbols-outlined text-[14px]">edit</span>
+              Edit
+            </button>
+          </div>
+          <div class="font-body-md text-body-md text-on-surface-variant leading-relaxed" id="profile-bio-text">
+            ${user.bio || 'Senior Full-Stack Engineer working across platform infrastructure, identity services, and internal tooling.'}
           </div>
         </div>
 
@@ -541,8 +569,18 @@ const ProfileView = {
               </div>
 
               <div class="space-y-1">
+                <label class="font-label-md text-label-md text-on-surface font-semibold" for="edit-bio">Professional Bio / Summary</label>
+                <textarea id="edit-bio" rows="2" class="w-full px-3 py-2 rounded-lg border border-outline-variant/50 font-body-md text-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20" placeholder="Brief statement of responsibilities, skills, or team focus...">${user.bio || ''}</textarea>
+              </div>
+
+              <div class="space-y-1">
                 <label class="font-label-md text-label-md text-on-surface font-semibold" for="edit-phone">Direct Phone</label>
                 <input id="edit-phone" class="w-full h-10 px-3 rounded-lg border border-outline-variant/50 font-body-md text-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20" value="${user.phone || ''}"/>
+              </div>
+
+              <div class="space-y-1">
+                <label class="font-label-md text-label-md text-on-surface font-semibold" for="edit-profile-link">Professional Profile URL / Link</label>
+                <input id="edit-profile-link" class="w-full h-10 px-3 rounded-lg border border-outline-variant/50 font-body-md text-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20" placeholder="https://github.com/username or internal link..." value="${user.profileLink || ''}"/>
               </div>
 
               <div class="space-y-1">
@@ -629,6 +667,8 @@ const ProfileView = {
     const seating = document.getElementById('edit-seating').value;
     const emergencyContact = document.getElementById('edit-emergency-contact').value;
     const emergencyPhone = document.getElementById('edit-emergency-phone').value;
+    const bio = document.getElementById('edit-bio') ? document.getElementById('edit-bio').value : undefined;
+    const profileLink = document.getElementById('edit-profile-link') ? document.getElementById('edit-profile-link').value : undefined;
 
     try {
       const res = await State.apiFetch('/api/users/profile', {
@@ -640,7 +680,9 @@ const ProfileView = {
           phone,
           seating,
           emergencyContact,
-          emergencyPhone
+          emergencyPhone,
+          bio,
+          profileLink
         })
       });
 

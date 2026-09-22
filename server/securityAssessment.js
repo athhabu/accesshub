@@ -2,7 +2,7 @@
 
 const { writeDB } = require('./db');
 
-// Server-side authority for all 20 Security Assessment check metadata.
+// Server-side authority for all 42 Security Assessment check metadata.
 // Vulnerability names are NEVER sent to the client for pending checks.
 // This module is the single source of truth — do not duplicate in frontend code.
 
@@ -26,7 +26,29 @@ const CHECKS = {
   17: { title: 'Access Profile',            vulnerability: 'Unauthorized Role / Permission Assignment' },
   18: { title: 'Expense Records',           vulnerability: 'Unauthorized Expense / Invoice Access' },
   19: { title: 'Request Decisions',         vulnerability: 'Unauthorized Request Rejection' },
-  20: { title: 'Calendar Events',           vulnerability: 'Unauthorized Calendar / Event Modification' }
+  20: { title: 'Calendar Events',           vulnerability: 'Unauthorized Calendar / Event Modification' },
+  21: { title: 'Search Results',            vulnerability: 'Reflected XSS' },
+  22: { title: 'Employee Profile',          vulnerability: 'Stored XSS' },
+  23: { title: 'Search Preview',            vulnerability: 'DOM XSS via URL Query Parameter' },
+  24: { title: 'Shared View',               vulnerability: 'DOM XSS via URL Fragment / Hash' },
+  25: { title: 'Employee Link',             vulnerability: 'Attribute-Context XSS' },
+  26: { title: 'Report Preview',            vulnerability: 'JavaScript-Context XSS' },
+  27: { title: 'Knowledge Base',            vulnerability: 'HTML/Markdown Rendering XSS' },
+  28: { title: 'Activity Feed',             vulnerability: 'JSON/API → DOM XSS' },
+  29: { title: 'Company Announcements',     vulnerability: 'Stored XSS — Shared Announcement' },
+  30: { title: 'Administration Review',     vulnerability: 'Stored XSS — Privileged View' },
+  31: { title: 'DOM Sink Vulnerability',    vulnerability: 'DOM XSS — Unsafe Client-Side Sink' },
+  32: { title: 'Client-Side Template',      vulnerability: 'Client-Side Template Injection' },
+  33: { title: 'Employee Search',           vulnerability: 'SQL Injection' },
+  34: { title: 'Order Lookup',              vulnerability: 'SQL Injection' },
+  35: { title: 'Report Filtering',          vulnerability: 'Blind SQL Injection' },
+  36: { title: 'System Diagnostics',        vulnerability: 'OS Command Injection' },
+  37: { title: 'Directory Search',           vulnerability: 'LDAP Injection' },
+  38: { title: 'User Filtering',             vulnerability: 'NoSQL Injection' },
+  39: { title: 'Report Templates',          vulnerability: 'Server-Side Template Injection' },
+  40: { title: 'Document Lookup',           vulnerability: 'XPath Injection' },
+  41: { title: 'Calculation Filter',        vulnerability: 'Expression Language Injection' },
+  42: { title: 'Service Requests',          vulnerability: 'Second-Order SQL Injection' }
 };
 
 function recordExploit(db, checkId, req, res) {
@@ -35,7 +57,7 @@ function recordExploit(db, checkId, req, res) {
 
   if (!db.securityAssessment || !db.securityAssessment.checks) {
     db.securityAssessment = { checks: {} };
-    for (let i = 1; i <= 20; i++) {
+    for (let i = 1; i <= 42; i++) {
       db.securityAssessment.checks[i] = { status: 'pending', verifiedAt: null };
     }
   }

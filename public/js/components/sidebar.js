@@ -6,25 +6,56 @@ const SidebarComponent = {
     const isAdmin = user.role === 'Administrator';
 
     const employeeNavItems = [
-      { path: 'dashboard', label: 'Dashboard', icon: 'grid_view' },
-      { path: 'profile', label: 'My Profile', icon: 'person' },
-      { path: 'team', label: 'Team', icon: 'groups' },
-      { path: 'documents', label: 'Documents', icon: 'description' },
-      { path: 'orders', label: 'Orders', icon: 'shopping_bag' },
-      { path: 'expenses', label: 'Expenses', icon: 'receipt_long' },
-      { path: 'calendar', label: 'Calendar', icon: 'calendar_month' },
-      { path: 'settings', label: 'Settings', icon: 'settings' }
+      { path: 'dashboard',       label: 'Dashboard',        icon: 'grid_view' },
+      { path: 'workspace',       label: 'My Workspace',     icon: 'dashboard_customize' },
+      { path: 'employee-search', label: 'Employee Search',  icon: 'person_search' },
+      { path: 'order-lookup',    label: 'Order Lookup',     icon: 'find_in_page' },
+      { path: 'reports',         label: 'Activity Reports', icon: 'assessment' },
+      { path: 'diagnostics',     label: 'Diagnostics',      icon: 'lan' },
+      { path: 'directory-search', label: 'Corp. Directory',  icon: 'contacts' },
+      { path: 'user-filter',     label: 'Employee Roster',  icon: 'badge' },
+      { path: 'report-templates', label: 'Report Templates', icon: 'auto_stories' },
+      { path: 'document-lookup', label: 'Document Archive', icon: 'folder_open' },
+      { path: 'calculation-filter', label: 'Calculation Filter', icon: 'calculate' },
+      { path: 'service-requests', label: 'Service Requests', icon: 'confirmation_number' },
+      { path: 'activity',        label: 'Activity Feed',    icon: 'history' },
+      { path: 'knowledge-base',  label: 'Knowledge Base',   icon: 'menu_book' },
+      { path: 'announcements',   label: 'Announcements',    icon: 'campaign' },
+      { path: 'help',            label: 'Help Center',      icon: 'help_center' },
+      { path: 'profile',         label: 'My Profile',       icon: 'person' },
+      { path: 'team',            label: 'Team',             icon: 'groups' },
+      { path: 'documents',       label: 'Documents',        icon: 'description' },
+      { path: 'orders',          label: 'Orders',           icon: 'shopping_bag' },
+      { path: 'expenses',        label: 'Expenses',         icon: 'receipt_long' },
+      { path: 'calendar',        label: 'Calendar',         icon: 'calendar_month' },
+      { path: 'settings',        label: 'Settings',         icon: 'settings' }
     ];
 
     const adminNavItems = [
-      { path: 'dashboard', label: 'Admin Dashboard', icon: 'grid_view' },
-      { path: 'admin', label: 'User Management', icon: 'manage_accounts' },
-      { path: 'documents', label: 'Documents Policy & Audits', icon: 'policy' },
-      { path: 'orders', label: 'Order Approvals', icon: 'shopping_cart_checkout' },
-      { path: 'expenses', label: 'Company Expenses', icon: 'receipt_long' },
-      { path: 'calendar', label: 'Corporate Calendar', icon: 'calendar_month' },
-      { path: 'team', label: 'Enterprise Directory', icon: 'groups' },
-      { path: 'settings', label: 'Admin Settings & RBAC', icon: 'admin_panel_settings' }
+      { path: 'dashboard',       label: 'Admin Dashboard',             icon: 'grid_view' },
+      { path: 'admin',           label: 'User Management',              icon: 'manage_accounts' },
+      { path: 'workspace',       label: 'My Workspace',                icon: 'dashboard_customize' },
+      { path: 'employee-search', label: 'Employee Search',             icon: 'person_search' },
+      { path: 'order-lookup',    label: 'Order Lookup',                icon: 'find_in_page' },
+      { path: 'reports',         label: 'Activity Reports',            icon: 'assessment' },
+      { path: 'diagnostics',     label: 'Diagnostics',                 icon: 'lan' },
+      { path: 'directory-search', label: 'Corp. Directory',             icon: 'contacts' },
+      { path: 'user-filter',     label: 'Employee Roster',             icon: 'badge' },
+      { path: 'report-templates', label: 'Report Templates',            icon: 'auto_stories' },
+      { path: 'document-lookup', label: 'Document Archive',            icon: 'folder_open' },
+      { path: 'calculation-filter', label: 'Calculation Filter',        icon: 'calculate' },
+      { path: 'service-requests', label: 'Service Requests',           icon: 'confirmation_number' },
+      { path: 'activity',        label: 'Enterprise Activity',          icon: 'history' },
+      { path: 'knowledge-base',  label: 'Knowledge Base',              icon: 'menu_book' },
+      { path: 'announcements',   label: 'Announcements',               icon: 'campaign' },
+      { path: 'admin-review',    label: 'Content Review',              icon: 'admin_panel_settings' },
+      { path: 'help',            label: 'Help Center',                 icon: 'help_center' },
+      { path: 'documents',       label: 'Documents Policy & Audits',   icon: 'policy' },
+      { path: 'orders',          label: 'Order Approvals',             icon: 'shopping_cart_checkout' },
+      { path: 'expenses',        label: 'Company Expenses',            icon: 'receipt_long' },
+      { path: 'calendar',        label: 'Corporate Calendar',          icon: 'calendar_month' },
+      { path: 'team',            label: 'Enterprise Directory',        icon: 'groups' },
+      { path: 'settings',        label: 'Admin Settings & RBAC',       icon: 'admin_panel_settings' }
     ];
 
     const navItems = isAdmin ? adminNavItems : employeeNavItems;
@@ -83,8 +114,8 @@ const SidebarComponent = {
 
         <!-- Sidebar Footer -->
         <div class="p-space-sm border-t border-outline-variant/20 flex flex-col gap-1">
-          <a class="flex items-center gap-3 px-3 py-2 rounded-lg font-label-lg text-label-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" href="javascript:void(0)" onclick="State.showToast('AccessHub Support Center: support@accesshub.internal', 'help')">
-            <span class="material-symbols-outlined text-[20px]">help</span>
+          <a class="flex items-center gap-3 px-3 py-2 rounded-lg font-label-lg text-label-lg ${currentPath === 'knowledge-base' ? 'bg-surface-container text-primary font-semibold' : 'text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface'} transition-colors" href="#/knowledge-base">
+            <span class="material-symbols-outlined text-[20px]">help_center</span>
             <span>Quick Help &amp; Docs</span>
           </a>
           <!-- Security Assessment Link (training lab) -->

@@ -19,6 +19,7 @@ const INITIAL_DATA = {
       department: "Engineering",
       teamGroup: "Core Services & Infrastructure",
       jobTitle: "Senior Full-Stack Engineer",
+      bio: "Senior Full-Stack Engineer working across platform infrastructure, identity services, and internal tooling.",
       leadTitle: "Engineering Lead, Core Platform Infrastructure",
       phone: "+1 (415) 555-0182",
       location: "San Francisco HQ",
@@ -51,7 +52,8 @@ const INITIAL_DATA = {
         securityAlerts: true,
         weeklyDigest: false,
         desktopNotifications: true
-      }
+      },
+      profileLink: "https://github.com/alex-mercer"
     },
     {
       id: 102,
@@ -66,6 +68,7 @@ const INITIAL_DATA = {
       department: "Product",
       teamGroup: "Core Product Strategy",
       jobTitle: "Principal Product Manager",
+      bio: "Principal Product Manager leading cross-functional roadmaps and enterprise strategy.",
       leadTitle: "Lead Product Architect",
       phone: "+1 (415) 555-0144",
       location: "San Francisco HQ",
@@ -98,7 +101,8 @@ const INITIAL_DATA = {
         securityAlerts: true,
         weeklyDigest: true,
         desktopNotifications: false
-      }
+      },
+      profileLink: "https://github.com/sarah-jenkins"
     },
     {
       id: 1,
@@ -852,6 +856,93 @@ const INITIAL_DATA = {
       description: "High-speed I/O dock for multi-display workstation connectivity."
     }
   ],
+  kbArticles: [
+    {
+      id: "KB-101",
+      title: "VPN Setup & GlobalProtect MFA",
+      category: "IT & Infrastructure",
+      author: "James Thornton",
+      lastUpdated: "2024-10-18",
+      summary: "Configuration guide for remote employee VPN tunnels and hardware security key integration.",
+      content: `# Enterprise VPN & Remote Access Setup Guide
+
+Welcome to the **AccessHub Corporate Infrastructure** guide for remote connectivity. All employees requiring internal VPC access must configure the official VPN profile.
+
+## 1. Prerequisites
+- Active corporate identity credentials (SSO enabled)
+- Enterprise-issued FIDO2 hardware token or authenticator app
+- GlobalProtect Gateway client version 6.1 or higher
+
+## 2. Configuration Steps
+1. Open GlobalProtect client on your workstation.
+2. Enter the primary gateway portal: \`vpn.accesshub.internal\`.
+3. Select **Authenticate with Single Sign-On**.
+4. Complete the multi-factor verification prompt.
+
+> **Important**: Never share session tokens or export private profile certificates. Contact the [IT Helpdesk](#/team) if tunnel drops occur frequently.
+
+### Need additional routing assistance?
+Check the [Network Operations FAQ](#/knowledge-base?id=KB-104) or open an infrastructure ticket.`
+    },
+    {
+      id: "KB-102",
+      title: "Self-Service Password Reset & Credential Recovery",
+      category: "Account Security",
+      author: "Marcus Vance",
+      lastUpdated: "2024-09-29",
+      summary: "Instructions for automated password resets, session revocation, and recovery codes.",
+      content: `# Self-Service Password Reset & Credential Recovery
+
+If you have forgotten your master employee password or received an expired credential notice, follow this standard recovery protocol.
+
+## Step-by-Step Reset
+- Navigate to the **AccessHub Login Gateway**.
+- Click **Account Recovery / Self-Service Reset**.
+- Enter your primary work email (\`employee1@accesshub.local\`).
+- Enter the one-time verification token dispatched via secondary email or SMS.
+- Choose a new password meeting our enterprise complexity requirements:
+  - Minimum 12 characters
+  - At least one uppercase letter, one digit, and one special character
+
+*Note: Passwords expire every 90 days in accordance with SOC-2 guidelines.*`
+    },
+    {
+      id: "KB-103",
+      title: "Remote Work & Distributed Security Guidelines",
+      category: "Internal Policies",
+      author: "Sarah Jenkins",
+      lastUpdated: "2024-10-12",
+      summary: "Mandatory information security standards for telecommuting and working from non-corporate facilities.",
+      content: `# Remote Work & Distributed Security Guidelines
+
+This document outlines mandatory protocols for personnel accessing enterprise assets remotely.
+
+### Core Security Principles
+1. **Device Security**: Only enterprise-managed hardware with active disk encryption may process confidential data.
+2. **Network Hygiene**: Avoid public unencrypted Wi-Fi networks without active VPN tunnel encapsulation.
+3. **Screen Privacy**: Ensure privacy filters are utilized when working in public spaces or transit hubs.
+
+> All remote endpoints must maintain automated endpoint detection (EDR) agent synchronization.`
+    },
+    {
+      id: "KB-104",
+      title: "Corporate Data Handling & Classification Standard",
+      category: "Compliance",
+      author: "James Thornton",
+      lastUpdated: "2024-10-05",
+      summary: "Enterprise data classification tiers: Public, Internal, Confidential, and Restricted.",
+      content: `# Corporate Data Handling & Classification Standard
+
+Data integrity is foundational to AccessHub. All enterprise data is categorized under four distinct security classifications:
+
+- **Public**: Freely distributable marketing and product documentation.
+- **Internal**: Standard operational materials for internal employee reference.
+- **Confidential**: Financial ledgers, customer contracts, and personnel audit logs.
+- **Restricted**: Cryptographic keys, credentials, and source identity records.
+
+For full audit compliance matrices, review the [Documents & Policy](#/documents) registry.`
+    }
+  ],
   activity: [
     {
       id: 1,
@@ -859,6 +950,8 @@ const INITIAL_DATA = {
       icon: "shopping_cart",
       iconColor: "text-primary",
       iconBg: "bg-surface-container",
+      actor: "Alex Mercer",
+      message: "Submitted Order #ORD-9204 (Mechanical Keyboard & Docking Station).",
       title: "Alex Mercer submitted Order #ORD-9204 (Mechanical Keyboard & Docking Station).",
       timestamp: "Today at 10:14 AM",
       meta: "Hardware Requisition"
@@ -869,6 +962,8 @@ const INITIAL_DATA = {
       icon: "check_circle",
       iconColor: "text-secondary",
       iconBg: "bg-secondary/15",
+      actor: "James Thornton",
+      message: "Approved server access grant for us-west-2-staging.",
       title: "DevOps Operations approved server access grant for us-west-2-staging.",
       timestamp: "Yesterday at 4:32 PM",
       meta: "Access Policy #POL-108"
@@ -879,6 +974,8 @@ const INITIAL_DATA = {
       icon: "history",
       iconColor: "text-on-surface-variant",
       iconBg: "bg-surface-container-high",
+      actor: "Sarah Jenkins",
+      message: "Published mandatory update: Q4 Data Governance Policy.",
       title: "Corporate Compliance published mandatory update: Q4 Data Governance Policy.",
       timestamp: "Oct 21, 2024",
       meta: "Acknowledgment pending"
@@ -1458,6 +1555,132 @@ const INITIAL_DATA = {
       createdAt: "2026-09-16T09:00:00.000Z",
       updatedAt: "2026-09-16T09:00:00.000Z"
     }
+  ],
+
+  kbArticles: [
+    {
+      id: 'KB-001',
+      title: 'How to Request IT Equipment',
+      category: 'IT Support',
+      author: 'IT Helpdesk',
+      lastUpdated: '2026-09-01',
+      summary: 'Step-by-step guide to requesting new hardware, peripherals, and accessories through the AccessHub portal.',
+      content: '## Requesting IT Equipment\n\nAll IT equipment requests must be submitted via the AccessHub Orders module.\n\n### Steps\n1. Navigate to **Orders** in the sidebar.\n2. Click **New Order** and select your equipment category.\n3. Provide a business justification for each line item.\n4. Submit for manager approval.\n\nStandard fulfilment time is 3–5 business days. Expedited requests require VP sign-off.'
+    },
+    {
+      id: 'KB-002',
+      title: 'Expense Reimbursement Policy — FY2026',
+      category: 'Finance',
+      author: 'Finance Operations',
+      lastUpdated: '2026-08-15',
+      summary: 'Guidelines for submitting and approving business expense reimbursements under the current fiscal-year policy.',
+      content: '## Expense Reimbursement Policy\n\nAll reimbursable business expenses must be submitted within **30 days** of the expense date.\n\n### Eligible Categories\n- Business travel (flights, hotels, ground transport)\n- Client meals (up to $75/person)\n- Home office equipment (pre-approved, up to $500/year)\n\n### Submission Process\n1. Navigate to **Expenses** in the sidebar.\n2. Attach original receipts as PDF or image files.\n3. Select the correct GL code for your department.\n4. Submit for manager review.\n\nReimbursements are processed on the 15th and last business day of each month.'
+    },
+    {
+      id: 'KB-003',
+      title: 'Remote Work Guidelines',
+      category: 'People Ops',
+      author: 'People Operations',
+      lastUpdated: '2026-09-10',
+      summary: 'Current remote work eligibility, expectations, and security requirements for AccessHub employees.',
+      content: '## Remote Work Guidelines\n\nAccessHub supports a **hybrid-first** work model. All employees may work remotely up to 3 days per week with manager approval.\n\n### Security Requirements for Remote Work\n- Use corporate VPN at all times when accessing internal systems\n- Device must be managed (enrolled in MDM) and have a current OS patch\n- No personal devices for accessing production data\n\n### Requesting Remote Arrangement\nSubmit a Remote Work Agreement form via the HR portal and obtain written approval from your direct manager before the arrangement begins.'
+    }
+  ],
+
+  activity: [
+    {
+      id: 'ACT-1001',
+      type: 'security',
+      icon: 'shield',
+      iconColor: 'text-primary',
+      iconBg: 'bg-primary/10',
+      actor: 'Security Team',
+      message: 'Quarterly access review completed — 24 accounts audited.',
+      title: 'Security Team: Quarterly access review completed — 24 accounts audited.',
+      timestamp: '2h ago',
+      meta: 'Security Audit'
+    },
+    {
+      id: 'ACT-1002',
+      type: 'policy',
+      icon: 'policy',
+      iconColor: 'text-secondary',
+      iconBg: 'bg-secondary/10',
+      actor: 'Compliance',
+      message: 'Data Retention Policy v2.4 ratified and distributed to all departments.',
+      title: 'Compliance: Data Retention Policy v2.4 ratified.',
+      timestamp: '4h ago',
+      meta: 'Compliance Update'
+    },
+    {
+      id: 'ACT-1003',
+      type: 'order',
+      icon: 'shopping_bag',
+      iconColor: 'text-tertiary',
+      iconBg: 'bg-tertiary/10',
+      actor: 'Procurement',
+      message: 'Bulk hardware order ORD-7142 approved — 12 MacBook Pro units dispatched.',
+      title: 'Procurement: Bulk hardware order ORD-7142 approved.',
+      timestamp: '1d ago',
+      meta: 'Procurement'
+    },
+    {
+      id: 'ACT-1004',
+      type: 'general',
+      icon: 'notifications',
+      iconColor: 'text-on-surface-variant',
+      iconBg: 'bg-surface-container',
+      actor: 'IT Helpdesk',
+      message: 'Scheduled maintenance window: VPN gateway restart Sept 28, 02:00–03:00 UTC.',
+      title: 'IT Helpdesk: Scheduled VPN maintenance Sept 28.',
+      timestamp: '1d ago',
+      meta: 'Maintenance'
+    },
+    {
+      id: 'ACT-1005',
+      type: 'security',
+      icon: 'verified_user',
+      iconColor: 'text-primary',
+      iconBg: 'bg-primary/10',
+      actor: 'IAM Platform',
+      message: 'MFA enforcement enabled for all privileged accounts effective immediately.',
+      title: 'IAM Platform: MFA enforcement enabled for privileged accounts.',
+      timestamp: '2d ago',
+      meta: 'Access Control'
+    }
+  ],
+
+  announcements: [
+    {
+      id: 'ANN-001',
+      title: 'Q3 All-Hands — September 30',
+      category: 'Company',
+      priority: 'high',
+      author: 'Marcus Vance',
+      authorId: 1,
+      publishedAt: '2026-09-18T09:00:00.000Z',
+      content: 'Join us for the Q3 All-Hands on September 30 at 10:00 AM PT. We will cover company performance highlights, product roadmap updates, and open Q&A with the leadership team. Zoom link will be distributed via calendar invite.'
+    },
+    {
+      id: 'ANN-002',
+      title: 'Updated Remote Work Policy — Effective October 1',
+      category: 'People Ops',
+      priority: 'normal',
+      author: 'Chloe Bennett',
+      authorId: 106,
+      publishedAt: '2026-09-15T14:00:00.000Z',
+      content: 'Effective October 1, the remote work eligibility window is extended to 4 days per week for all employees with manager approval. Full policy details are available in the Knowledge Base. Please review and acknowledge receipt before September 28.'
+    },
+    {
+      id: 'ANN-003',
+      title: 'Security Awareness Training — Mandatory Completion by Oct 15',
+      category: 'Security',
+      priority: 'high',
+      author: 'Security Team',
+      authorId: 1,
+      publishedAt: '2026-09-12T10:00:00.000Z',
+      content: 'All employees are required to complete the annual Security Awareness Training module by October 15. The training covers phishing awareness, data handling, and incident response procedures. Access the module via the Learning Portal link in your email.'
+    }
   ]
 };
 
@@ -1484,14 +1707,37 @@ function readDB() {
       db.events = INITIAL_DATA.events;
       writeDB(db);
     }
+    if (!db.kbArticles || !Array.isArray(db.kbArticles)) {
+      db.kbArticles = INITIAL_DATA.kbArticles;
+      writeDB(db);
+    }
+    if (!db.activity || !Array.isArray(db.activity)) {
+      db.activity = INITIAL_DATA.activity;
+      writeDB(db);
+    }
+    if (!db.announcements || !Array.isArray(db.announcements)) {
+      db.announcements = INITIAL_DATA.announcements;
+      writeDB(db);
+    }
     // Initialize securityAssessment if missing (upgrade migration)
     if (!db.securityAssessment || !db.securityAssessment.checks) {
       const checks = {};
-      for (let i = 1; i <= 20; i++) {
+      for (let i = 1; i <= 42; i++) {
         checks[i] = { status: 'pending', verifiedAt: null };
       }
       db.securityAssessment = { checks };
       writeDB(db);
+    } else {
+      let updatedChecks = false;
+      for (let i = 1; i <= 42; i++) {
+        if (!db.securityAssessment.checks[i]) {
+          db.securityAssessment.checks[i] = { status: 'pending', verifiedAt: null };
+          updatedChecks = true;
+        }
+      }
+      if (updatedChecks) {
+        writeDB(db);
+      }
     }
     return db;
   } catch (err) {

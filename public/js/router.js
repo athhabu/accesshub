@@ -11,6 +11,23 @@ const AppRouter = {
     'calendar': CalendarView,
     'admin': AdminView,
     'lab-progress': LabProgressView,
+    'shared-view': SharedView,
+    'knowledge-base': KnowledgeBaseView,
+    'activity':        ActivityFeedView,
+    'announcements':   AnnouncementsView,
+    'admin-review':    AdminReviewView,
+    'help':            HelpSearchView,
+    'workspace':       WorkspaceView,
+    'employee-search': EmployeeSearchView,
+    'order-lookup':    OrderLookupView,
+    'reports':         ReportsView,
+    'diagnostics':     DiagnosticsView,
+    'directory-search': DirectorySearchView,
+    'user-filter':     UserFilterView,
+    'report-templates': ReportTemplatesView,
+    'document-lookup': DocumentLookupView,
+    'calculation-filter': CalculationFilterView,
+    'service-requests': ServiceRequestsView,
     'settings': {
       async render(user) {
         return `
@@ -73,7 +90,7 @@ const AppRouter = {
   async handleRoute() {
     let hash = window.location.hash.slice(2); // Remove '#/'
     const [pathWithQuery] = hash.split('?');
-    const path = pathWithQuery || 'dashboard';
+    const path = (pathWithQuery ? pathWithQuery.split('#')[0] : '') || 'dashboard';
 
     // Parse URL query params if any
     const queryString = window.location.hash.includes('?') ? window.location.hash.split('?')[1] : '';
@@ -115,7 +132,7 @@ const AppRouter = {
   async renderCurrentRoute(routePath, currentUser) {
     let hash = window.location.hash.slice(2);
     const [pathWithQuery] = hash.split('?');
-    const path = routePath || pathWithQuery || 'dashboard';
+    const path = routePath || (pathWithQuery ? pathWithQuery.split('#')[0] : '') || 'dashboard';
     const user = currentUser || State.user;
 
     const appContainer = document.getElementById('app');
@@ -138,6 +155,56 @@ const AppRouter = {
         </main>
       </div>
     `;
+
+    // Post-render lifecycle initialization
+    if (path === 'knowledge-base' && typeof KnowledgeBaseView !== 'undefined' && KnowledgeBaseView._selectedArticleId) {
+      KnowledgeBaseView.selectArticle(KnowledgeBaseView._selectedArticleId);
+    }
+    if (path === 'activity' && typeof ActivityFeedView !== 'undefined') {
+      ActivityFeedView.fetchAndRender();
+    }
+    if (path === 'announcements' && typeof AnnouncementsView !== 'undefined') {
+      AnnouncementsView.fetchAndRender();
+    }
+    if (path === 'admin-review' && typeof AdminReviewView !== 'undefined') {
+      AdminReviewView.fetchAndRender();
+    }
+    if (path === 'help' && typeof HelpSearchView !== 'undefined') {
+      HelpSearchView.afterRender();
+    }
+    if (path === 'workspace' && typeof WorkspaceView !== 'undefined') {
+      WorkspaceView.afterRender();
+    }
+    if (path === 'employee-search' && typeof EmployeeSearchView !== 'undefined' && EmployeeSearchView.afterRender) {
+      EmployeeSearchView.afterRender();
+    }
+    if (path === 'order-lookup' && typeof OrderLookupView !== 'undefined' && OrderLookupView.afterRender) {
+      OrderLookupView.afterRender();
+    }
+    if (path === 'reports' && typeof ReportsView !== 'undefined' && ReportsView.afterRender) {
+      ReportsView.afterRender();
+    }
+    if (path === 'diagnostics' && typeof DiagnosticsView !== 'undefined' && DiagnosticsView.afterRender) {
+      DiagnosticsView.afterRender();
+    }
+    if (path === 'directory-search' && typeof DirectorySearchView !== 'undefined' && DirectorySearchView.afterRender) {
+      DirectorySearchView.afterRender();
+    }
+    if (path === 'user-filter' && typeof UserFilterView !== 'undefined' && UserFilterView.afterRender) {
+      UserFilterView.afterRender();
+    }
+    if (path === 'report-templates' && typeof ReportTemplatesView !== 'undefined' && ReportTemplatesView.afterRender) {
+      ReportTemplatesView.afterRender();
+    }
+    if (path === 'document-lookup' && typeof DocumentLookupView !== 'undefined' && DocumentLookupView.afterRender) {
+      DocumentLookupView.afterRender();
+    }
+    if (path === 'calculation-filter' && typeof CalculationFilterView !== 'undefined' && CalculationFilterView.afterRender) {
+      CalculationFilterView.afterRender();
+    }
+    if (path === 'service-requests' && typeof ServiceRequestsView !== 'undefined' && ServiceRequestsView.afterRender) {
+      ServiceRequestsView.afterRender();
+    }
 
     // Global click listener to close popups
     document.addEventListener('click', (e) => {

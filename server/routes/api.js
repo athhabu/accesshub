@@ -3,7 +3,15 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const { readDB, writeDB } = require('../db');
 const { generateToken, authenticateToken, requireAdmin } = require('../auth');
+const { exec } = require('child_process');
 const { CHECKS, recordExploit } = require('../securityAssessment');
+const { searchEmployees, lookupOrder, filterActivityReport } = require('../injectionDb');
+const { searchDirectory } = require('../ldapLab');
+const { filterUsers } = require('../noSqlLab');
+const { generateReport } = require('../templateLab');
+const { lookupDocuments } = require('../xpathLab');
+const { evaluateExpression } = require('../expressionLab');
+const { submitRequest, listRequests, generateRequestReport } = require('../secondOrderSqlLab');
 
 function sanitizeUser(user) {
   if (!user) return null;
@@ -118,6 +126,32 @@ router.get('/users/:id', authenticateToken, (req, res) => {
   res.json({ user: sanitizeUser(user) });
 });
 
+// -------------------------------------------------------------
+// Check #33 — Employee Search (SQL Injection)
+// Authenticated directory search endpoint. Vulnerable to SQL injection.
+// Registered before /employees/:id to prevent wildcard parameter capture.
+// -------------------------------------------------------------
+router.get('/employees/search', authenticateToken, (req, res) => {
+  const q = req.query.q !== undefined ? String(req.query.q) : '';
+  if (!q.trim()) {
+    return res.json({ query: q, count: 0, results: [] });
+  }
+
+  try {
+    const results = searchEmployees(q);
+    res.json({
+      query: q,
+      count: results.length,
+      results
+    });
+  } catch (err) {
+    res.status(500).json({
+      error: 'Database query execution failed',
+      details: err.message
+    });
+  }
+});
+
 router.get('/employees/:id', authenticateToken, (req, res) => {
   const db = readDB();
   const userId = parseInt(req.params.id, 10);
@@ -150,7 +184,9 @@ router.put('/users/profile', authenticateToken, (req, res) => {
     teamGroup,
     seating,
     emergencyContact,
-    emergencyPhone
+    emergencyPhone,
+    bio,
+    profileLink
   } = req.body;
 
   if (name && name.trim()) user.name = name.trim();
@@ -161,6 +197,8 @@ router.put('/users/profile', authenticateToken, (req, res) => {
   if (seating && seating.trim()) user.seating = seating.trim();
   if (emergencyContact && emergencyContact.trim()) user.emergencyContact = emergencyContact.trim();
   if (emergencyPhone && emergencyPhone.trim()) user.emergencyPhone = emergencyPhone.trim();
+  if (bio !== undefined) user.bio = typeof bio === 'string' ? bio.trim() : bio;
+  if (profileLink !== undefined) user.profileLink = typeof profileLink === 'string' ? profileLink.trim() : profileLink;
 
   writeDB(db);
 
@@ -316,6 +354,25 @@ router.get('/documents', authenticateToken, (req, res) => {
   res.json({
     total: docs.length,
     documents: docs
+  });
+});
+
+// -------------------------------------------------------------
+// Check #40 — Document Lookup (XPath Injection)
+// GET /api/documents/lookup
+// Query: category, owner, title
+// Vulnerability: title query parameter is concatenated unsanitized into
+// the server-side XPath expression against the synthetic XML dataset.
+// Manual verification only: no automatic X-Lab-Solved header.
+// Registered BEFORE /documents/:id so 'lookup' is not captured as an ID.
+// -------------------------------------------------------------
+router.get('/documents/lookup', authenticateToken, (req, res) => {
+  const { category = 'all', owner = 'all', title = '' } = req.query;
+  const result = lookupDocuments(category, owner, title);
+  res.json({
+    query: result.query,
+    count: result.count,
+    documents: result.documents
   });
 });
 
@@ -513,6 +570,32 @@ router.get('/orders', authenticateToken, (req, res) => {
     total: orders.length,
     orders
   });
+});
+
+// -------------------------------------------------------------
+// Check #34 — Order Lookup (SQL Injection)
+// Authenticated order reference lookup. Vulnerable to SQL injection.
+// Enforces department authorization independently to avoid IDOR/BAC.
+// Registered before /orders/:id to prevent wildcard parameter capture.
+// -------------------------------------------------------------
+router.get('/orders/lookup', authenticateToken, (req, res) => {
+  const reference = req.query.reference !== undefined ? String(req.query.reference) : '';
+  if (!reference.trim()) {
+    return res.status(400).json({ error: 'Order reference is required.' });
+  }
+
+  try {
+    const order = lookupOrder(reference, req.user);
+    if (!order) {
+      return res.status(404).json({ error: 'Order reference not found within your authorized department.' });
+    }
+    res.json({ order });
+  } catch (err) {
+    res.status(500).json({
+      error: 'Database query execution failed',
+      details: err.message
+    });
+  }
 });
 
 router.get('/orders/:id', authenticateToken, (req, res) => {
@@ -2030,6 +2113,202 @@ router.put('/events/:eventId', authenticateToken, (req, res) => {
 });
 
 // -------------------------------------------------------------
+// Knowledge Base Endpoints (XSS-07 / Check #27)
+// Provides corporate documentation guides and allows employees
+// to draft/submit articles with markdown formatting.
+// -------------------------------------------------------------
+router.get('/kb/articles', authenticateToken, (req, res) => {
+  const db = readDB();
+  const articles = (db.kbArticles || []).map(a => ({
+    id: a.id,
+    title: a.title,
+    category: a.category,
+    author: a.author,
+    lastUpdated: a.lastUpdated,
+    summary: a.summary
+  }));
+  res.json({ articles });
+});
+
+router.get('/kb/articles/:id', authenticateToken, (req, res) => {
+  const db = readDB();
+  const article = (db.kbArticles || []).find(a => a.id === req.params.id);
+  if (!article) {
+    return res.status(404).json({ error: 'Article not found' });
+  }
+  res.json({ article });
+});
+
+router.post('/kb/articles', authenticateToken, (req, res) => {
+  const { title, category, summary, content } = req.body;
+  if (!title || !content) {
+    return res.status(400).json({ error: 'Title and content are required' });
+  }
+  const db = readDB();
+  if (!db.kbArticles) db.kbArticles = [];
+
+  const newArticle = {
+    id: `KB-${Math.floor(100 + Math.random() * 900)}`,
+    title: String(title).trim(),
+    category: category ? String(category).trim() : 'General',
+    author: req.user.name || 'Alex Mercer',
+    lastUpdated: new Date().toISOString().split('T')[0],
+    summary: summary ? String(summary).trim() : (String(content).slice(0, 120) + '...'),
+    content: String(content)
+  };
+
+  db.kbArticles.push(newArticle);
+  writeDB(db);
+
+  res.status(201).json({
+    message: 'Knowledge base article published successfully',
+    article: newArticle
+  });
+});
+
+router.put('/kb/articles/:id', authenticateToken, (req, res) => {
+  const db = readDB();
+  const index = (db.kbArticles || []).findIndex(a => a.id === req.params.id);
+  if (index === -1) {
+    return res.status(404).json({ error: 'Article not found' });
+  }
+
+  const { title, category, summary, content } = req.body;
+  if (title) db.kbArticles[index].title = String(title).trim();
+  if (category) db.kbArticles[index].category = String(category).trim();
+  if (summary) db.kbArticles[index].summary = String(summary).trim();
+  if (content !== undefined) db.kbArticles[index].content = String(content);
+  db.kbArticles[index].lastUpdated = new Date().toISOString().split('T')[0];
+
+  writeDB(db);
+  res.json({
+    message: 'Knowledge base article updated successfully',
+    article: db.kbArticles[index]
+  });
+});
+
+// -------------------------------------------------------------
+// Activity Feed Endpoints (XSS-08 / Check #28)
+// Authenticated JSON API returning synthetic enterprise activity
+// events consumed dynamically by the frontend.
+// -------------------------------------------------------------
+router.get('/activity', authenticateToken, (req, res) => {
+  const db = readDB();
+  const rawActivities = db.activity || [];
+  const activities = rawActivities.map((act, index) => ({
+    id: act.id || `ACT-${1000 + index}`,
+    type: act.type || 'audit',
+    icon: act.icon || 'history',
+    iconColor: act.iconColor || 'text-primary',
+    iconBg: act.iconBg || 'bg-surface-container',
+    actor: act.actor || (act.title ? act.title.split(' ')[0] + ' ' + act.title.split(' ')[1] : 'System'),
+    message: act.message || act.title || 'Enterprise resource updated.',
+    title: act.title || act.message || 'Activity notification',
+    timestamp: act.timestamp || 'Just now',
+    meta: act.meta || 'Audit Log'
+  }));
+  res.json({ activities });
+});
+
+router.post('/activity', authenticateToken, (req, res) => {
+  const { message, action, type, meta } = req.body;
+  if (!message) {
+    return res.status(400).json({ error: 'Activity message is required' });
+  }
+
+  const db = readDB();
+  if (!db.activity) db.activity = [];
+
+  const newActivity = {
+    id: `ACT-${Math.floor(1000 + Math.random() * 9000)}`,
+    type: type ? String(type).trim() : 'general',
+    icon: 'notifications',
+    iconColor: 'text-primary',
+    iconBg: 'bg-surface-container',
+    actor: req.user.name || 'Alex Mercer',
+    message: String(message),
+    title: `${req.user.name || 'Alex Mercer'}: ${String(message)}`,
+    timestamp: 'Just now',
+    meta: meta ? String(meta).trim() : 'Portal Note'
+  };
+
+  db.activity.unshift(newActivity);
+  if (db.activity.length > 50) db.activity = db.activity.slice(0, 50);
+  writeDB(db);
+
+  res.status(201).json({
+    message: 'Activity logged successfully',
+    activity: newActivity
+  });
+});
+
+// -------------------------------------------------------------
+// Announcements Endpoints (XSS-09 / Check #29 — Shared Announcement)
+// Employee-facing: GET lists published announcements, POST stores a new
+// announcement body without sanitisation — the stored XSS sink for Check #29.
+// Admin Review: GET /api/admin/announcements renders stored content for
+// privileged review — the stored XSS sink for Check #30.
+// -------------------------------------------------------------
+router.get('/announcements', authenticateToken, (req, res) => {
+  const db = readDB();
+  const announcements = (db.announcements || []).map(a => ({
+    id: a.id,
+    title: a.title,
+    category: a.category || 'General',
+    priority: a.priority || 'normal',
+    author: a.author,
+    publishedAt: a.publishedAt,
+    content: a.content
+  }));
+  res.json({ announcements });
+});
+
+router.post('/announcements', authenticateToken, (req, res) => {
+  const { title, category, priority, content } = req.body;
+  if (!title || !content) {
+    return res.status(400).json({ error: 'Title and content are required.' });
+  }
+  const db = readDB();
+  if (!db.announcements) db.announcements = [];
+
+  const newAnnouncement = {
+    id: `ANN-${Math.floor(100 + Math.random() * 900)}`,
+    title: String(title).trim(),
+    category: category ? String(category).trim() : 'General',
+    priority: priority ? String(priority).trim() : 'normal',
+    author: req.user.name || 'Alex Mercer',
+    authorId: req.user.id,
+    publishedAt: new Date().toISOString(),
+    content: String(content)     // stored without sanitisation — XSS sink
+  };
+
+  db.announcements.unshift(newAnnouncement);
+  writeDB(db);
+
+  res.status(201).json({
+    message: 'Announcement published successfully.',
+    announcement: newAnnouncement
+  });
+});
+
+// Admin-only announcement review — Check #30 sink
+router.get('/admin/announcements', authenticateToken, requireAdmin, (req, res) => {
+  const db = readDB();
+  const announcements = (db.announcements || []).map(a => ({
+    id: a.id,
+    title: a.title,
+    category: a.category || 'General',
+    priority: a.priority || 'normal',
+    author: a.author,
+    authorId: a.authorId,
+    publishedAt: a.publishedAt,
+    content: a.content,
+    status: a.status || 'published'
+  }));
+  res.json({ announcements, total: announcements.length });
+});
+
+// -------------------------------------------------------------
 // Security Assessment Endpoints
 // These endpoints support the private /lab-progress training
 // scoreboard. Vulnerability names live exclusively in
@@ -2038,7 +2317,202 @@ router.put('/events/:eventId', authenticateToken, (req, res) => {
 // through the verify response or subsequent GET (already revealed).
 // -------------------------------------------------------------
 
-const TOTAL_CHECKS = 20;
+// -------------------------------------------------------------
+// Check #35 — Report Filtering (Blind SQL Injection)
+// Authenticated reporting endpoint. Vulnerable to Blind SQL injection.
+// Suppresses raw database errors to ensure true blind behavior.
+// -------------------------------------------------------------
+router.get('/reports/activity', authenticateToken, (req, res) => {
+  const department = req.query.department !== undefined ? String(req.query.department) : 'Engineering';
+  const status = req.query.status !== undefined ? String(req.query.status) : 'all';
+
+  const { count, results } = filterActivityReport(department, status);
+  res.json({
+    department,
+    status,
+    count,
+    results
+  });
+});
+
+// -------------------------------------------------------------
+// Check #36 — System Diagnostics (OS Command Injection)
+// Authenticated diagnostic ping endpoint. Vulnerable to OS command injection.
+// Safe training boundary: blocks destructive operations and sensitive file access.
+// -------------------------------------------------------------
+router.get('/diagnostics/ping', authenticateToken, (req, res) => {
+  const host = req.query.host !== undefined ? String(req.query.host).trim() : '';
+  if (!host) {
+    return res.status(400).json({ error: 'Target host is required.' });
+  }
+
+  // Safety boundary filter for private local training lab:
+  // Blocks destructive system operations, file deletion, and sensitive file exfiltration
+  const blockedTokens = [
+    /\bformat\b/i,
+    /\brmdir\b/i,
+    /\bdel\b/i,
+    /\bshutdown\b/i,
+    /powershell.*-enc/i,
+    /\bnet\s+user\b/i,
+    /\breg\s+(add|delete)\b/i,
+    /\bid_rsa\b/i,
+    /\.env\b/i,
+    /\bSAM\b/i,
+    /\bSYSTEM\b/i
+  ];
+
+  for (const pattern of blockedTokens) {
+    if (pattern.test(host)) {
+      return res.status(400).json({
+        error: 'Diagnostic operation restricted by security baseline policy.'
+      });
+    }
+  }
+
+  // Windows command injection sink: incorporates unescaped host parameter
+  const cmd = process.platform === 'win32'
+    ? `ping -n 1 ${host}`
+    : `ping -c 1 ${host}`;
+
+  exec(cmd, { timeout: 4000, maxBuffer: 1024 * 64 }, (err, stdout, stderr) => {
+    // Normal or executed diagnostic output returned cleanly
+    const output = (stdout || stderr || '').trim() || (err ? err.message : 'Diagnostic command completed.');
+    res.json({
+      target: host,
+      action: 'ping',
+      status: err && !stdout ? 'unreachable' : 'completed',
+      output
+    });
+  });
+});
+
+// -------------------------------------------------------------
+// Check #37 — Directory Search (LDAP Injection)
+// GET /api/directory/search?q=<cn>&dept=<dept>
+// Vulnerable: the q (cn) parameter is concatenated unsanitised into the
+// synthetic LDAP filter string.  dept uses a safe server-side allowlist.
+// -------------------------------------------------------------
+router.get('/directory/search', authenticateToken, (req, res) => {
+  const { q = '', dept } = req.query;
+  const { filter, results } = searchDirectory(q, dept);
+
+  // Detect exploitation: attacker escapes cn context or reaches non-active accounts
+  const exploited = (
+    q.includes(')(') ||
+    q.includes('|(') ||
+    q.includes('&(') ||
+    q.includes('!(') ||
+    results.some(r => r.status === 'service' || r.status === 'disabled')
+  );
+
+  if (exploited) {
+    const db = readDB();
+    recordExploit(db, 37, req, res);
+  }
+
+  res.json({ filter: filter.replace(/\0/g, '\\00'), results });
+});
+
+// -------------------------------------------------------------
+// Check #38 — User Filtering (NoSQL Injection)
+// POST /api/users/filter
+// Body: { department?: string, status?: string | object }
+// Vulnerable: status is passed directly into the synthetic NoSQL query engine
+// without type checking, allowing operator injection ({ "$ne": "active" } etc.)
+// -------------------------------------------------------------
+router.post('/users/filter', authenticateToken, (req, res) => {
+  const { department, status } = req.body;
+  const results = filterUsers(department, status);
+
+  // Detect exploitation: operator object sent as status, or privileged accounts returned
+  const exploited = (
+    (status !== null && status !== undefined && typeof status === 'object') ||
+    results.some(r => r.status === 'admin_reserved')
+  );
+
+  if (exploited) {
+    const db = readDB();
+    recordExploit(db, 38, req, res);
+  }
+
+  res.json({ count: results.length, results });
+});
+
+// -------------------------------------------------------------
+// Check #39 — Report Templates (Server-Side Template Injection)
+// POST /api/reports/templates/generate
+// Body: { title, employee, department, summary, templateFormat }
+// Vulnerability: user-controlled fields (summary, title) are interpolated
+// directly into the server template before server-side compilation,
+// allowing {{ expression }} template evaluation.
+// Manual verification only: no automatic X-Lab-Solved header.
+// -------------------------------------------------------------
+router.post('/reports/templates/generate', authenticateToken, (req, res) => {
+  const { title, employee, department, summary, templateFormat } = req.body || {};
+  const report = generateReport({ title, employee, department, summary, templateFormat });
+  res.json({ success: true, report });
+});
+
+// -------------------------------------------------------------
+// Check #41 — Calculation Filter (Expression Language Injection)
+// POST /api/calculations/evaluate
+// Body: { amount, quantity, adjustmentFormula, calcType }
+// Vulnerability: adjustmentFormula is directly interpolated into the EL
+// expression string before the custom interpreter parses it, allowing
+// injection of additional context variable references and arithmetic.
+// Manual verification only — no automatic X-Lab-Solved header.
+// -------------------------------------------------------------
+router.post('/calculations/evaluate', authenticateToken, (req, res) => {
+  const { amount, quantity, adjustmentFormula, calcType } = req.body || {};
+  const result = evaluateExpression({ amount, quantity, adjustmentFormula, calcType });
+  res.json({ success: true, ...result });
+});
+
+// GET /api/calculations/variables — returns the approved EL variable catalogue
+router.get('/calculations/variables', authenticateToken, (req, res) => {
+  const { APPROVED_VARIABLES } = require('../expressionLab');
+  res.json({ variables: Array.from(APPROVED_VARIABLES) });
+});
+
+// -------------------------------------------------------------
+// Check #42 — Service Requests (Second-Order SQL Injection)
+// Stage 1 — POST /api/service-requests         (safe parameterized insert)
+// Stage 1 — GET  /api/service-requests         (safe parameterized list)
+// Stage 2 — POST /api/service-requests/:id/report (VULNERABLE — stored name
+//           is re-used in an un-parameterized aggregation query)
+// Manual verification only — no automatic X-Lab-Solved header.
+// -------------------------------------------------------------
+router.get('/service-requests', authenticateToken, (req, res) => {
+  const { status } = req.query;
+  const requests = listRequests(status);
+  res.json({ count: requests.length, requests });
+});
+
+router.post('/service-requests', authenticateToken, (req, res) => {
+  const { requestorName, requestorEmail, department, category, priority, subject, description } = req.body || {};
+  try {
+    const result = submitRequest({ requestorName, requestorEmail, department, category, priority, subject, description });
+    res.json({ success: true, ...result });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+router.post('/service-requests/:id/report', authenticateToken, (req, res) => {
+  const requestId = parseInt(req.params.id, 10);
+  if (isNaN(requestId)) {
+    return res.status(400).json({ error: 'Invalid request ID' });
+  }
+  const report = generateRequestReport(requestId);
+  res.json({ success: true, report });
+});
+
+// -------------------------------------------------------------
+// Security Assessment Scoreboard & Progress Tracking
+// -------------------------------------------------------------
+
+const TOTAL_CHECKS = 42;
 
 // Ensure the DB has a valid securityAssessment.checks structure.
 function getOrInitAssessment(db) {
@@ -2048,6 +2522,12 @@ function getOrInitAssessment(db) {
       checks[i] = { status: 'pending', verifiedAt: null };
     }
     db.securityAssessment = { checks };
+  } else {
+    for (let i = 1; i <= TOTAL_CHECKS; i++) {
+      if (!db.securityAssessment.checks[i]) {
+        db.securityAssessment.checks[i] = { status: 'pending', verifiedAt: null };
+      }
+    }
   }
   return db.securityAssessment;
 }
@@ -2063,10 +2543,10 @@ function buildAssessmentResponse(db) {
     responseChecks[i] = {
       status: stored.status,
       verifiedAt: stored.verifiedAt || null,
-      title: meta.title
+      title: meta ? meta.title : `Check ${i}`
     };
     // Reveal vulnerability name only for checks the user has already verified.
-    if (stored.status === 'verified') {
+    if (stored.status === 'verified' && meta) {
       responseChecks[i].vulnerabilityName = meta.vulnerability;
     }
   }
@@ -2088,7 +2568,7 @@ router.get('/security-assessment', authenticateToken, (req, res) => {
 router.post('/security-assessment/:checkId/verify', authenticateToken, (req, res) => {
   const checkId = parseInt(req.params.checkId, 10);
   if (isNaN(checkId) || checkId < 1 || checkId > TOTAL_CHECKS) {
-    return res.status(400).json({ error: 'Invalid check ID. Must be 1–20.' });
+    return res.status(400).json({ error: 'Invalid check ID. Must be 1–42.' });
   }
 
   const db = readDB();
@@ -2122,7 +2602,7 @@ router.post('/security-assessment/:checkId/verify', authenticateToken, (req, res
 });
 
 // POST /api/security-assessment/reset  (registered before /:checkId/reset)
-// Resets ALL 20 checks to pending. No vulnerability names returned.
+// Resets ALL 42 checks to pending. No vulnerability names returned.
 router.post('/security-assessment/reset', authenticateToken, (req, res) => {
   const db = readDB();
   const checks = {};
@@ -2139,7 +2619,7 @@ router.post('/security-assessment/reset', authenticateToken, (req, res) => {
 router.post('/security-assessment/:checkId/reset', authenticateToken, (req, res) => {
   const checkId = parseInt(req.params.checkId, 10);
   if (isNaN(checkId) || checkId < 1 || checkId > TOTAL_CHECKS) {
-    return res.status(400).json({ error: 'Invalid check ID. Must be 1–20.' });
+    return res.status(400).json({ error: 'Invalid check ID. Must be 1–42.' });
   }
 
   const db = readDB();

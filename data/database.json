@@ -48,7 +48,9 @@
         "securityAlerts": true,
         "weeklyDigest": false,
         "desktopNotifications": true
-      }
+      },
+      "bio": "Senior Full-Stack Engineer working across platform infrastructure, identity services, and internal tooling.",
+      "profileLink": "https://github.com/alex-mercer"
     },
     {
       "id": 102,
@@ -98,7 +100,8 @@
         "securityAlerts": true,
         "weeklyDigest": true,
         "desktopNotifications": false
-      }
+      },
+      "profileLink": "https://github.com/sarah-jenkins"
     },
     {
       "id": 1,
@@ -1672,7 +1675,165 @@
       "20": {
         "status": "pending",
         "verifiedAt": null
+      },
+      "21": {
+        "status": "pending",
+        "verifiedAt": null
+      },
+      "22": {
+        "status": "pending",
+        "verifiedAt": null
+      },
+      "23": {
+        "status": "pending",
+        "verifiedAt": null
+      },
+      "24": {
+        "status": "pending",
+        "verifiedAt": null
+      },
+      "25": {
+        "status": "pending",
+        "verifiedAt": null
+      },
+      "26": {
+        "status": "pending",
+        "verifiedAt": null
+      },
+      "27": {
+        "status": "pending",
+        "verifiedAt": null
+      },
+      "28": {
+        "status": "pending",
+        "verifiedAt": null
+      },
+      "29": {
+        "status": "pending",
+        "verifiedAt": null
+      },
+      "30": {
+        "status": "pending",
+        "verifiedAt": null
+      },
+      "31": {
+        "status": "pending",
+        "verifiedAt": null
+      },
+      "32": {
+        "status": "pending",
+        "verifiedAt": null
+      },
+      "33": {
+        "status": "pending",
+        "verifiedAt": null
+      },
+      "34": {
+        "status": "pending",
+        "verifiedAt": null
+      },
+      "35": {
+        "status": "pending",
+        "verifiedAt": null
+      },
+      "36": {
+        "status": "pending",
+        "verifiedAt": null
+      },
+      "37": {
+        "status": "pending",
+        "verifiedAt": null
+      },
+      "38": {
+        "status": "pending",
+        "verifiedAt": null
+      },
+      "39": {
+        "status": "pending",
+        "verifiedAt": null
+      },
+      "40": {
+        "status": "pending",
+        "verifiedAt": null
+      },
+      "41": {
+        "status": "pending",
+        "verifiedAt": null
+      },
+      "42": {
+        "status": "pending",
+        "verifiedAt": null
       }
     }
-  }
+  },
+  "kbArticles": [
+    {
+      "id": "KB-101",
+      "title": "VPN Setup & GlobalProtect MFA",
+      "category": "IT & Infrastructure",
+      "author": "James Thornton",
+      "lastUpdated": "2024-10-18",
+      "summary": "Configuration guide for remote employee VPN tunnels and hardware security key integration.",
+      "content": "# Enterprise VPN & Remote Access Setup Guide\n\nWelcome to the **AccessHub Corporate Infrastructure** guide for remote connectivity. All employees requiring internal VPC access must configure the official VPN profile.\n\n## 1. Prerequisites\n- Active corporate identity credentials (SSO enabled)\n- Enterprise-issued FIDO2 hardware token or authenticator app\n- GlobalProtect Gateway client version 6.1 or higher\n\n## 2. Configuration Steps\n1. Open GlobalProtect client on your workstation.\n2. Enter the primary gateway portal: `vpn.accesshub.internal`.\n3. Select **Authenticate with Single Sign-On**.\n4. Complete the multi-factor verification prompt.\n\n> **Important**: Never share session tokens or export private profile certificates. Contact the [IT Helpdesk](#/team) if tunnel drops occur frequently.\n\n### Need additional routing assistance?\nCheck the [Network Operations FAQ](#/knowledge-base?id=KB-104) or open an infrastructure ticket."
+    },
+    {
+      "id": "KB-102",
+      "title": "Self-Service Password Reset & Credential Recovery",
+      "category": "Account Security",
+      "author": "Marcus Vance",
+      "lastUpdated": "2024-09-29",
+      "summary": "Instructions for automated password resets, session revocation, and recovery codes.",
+      "content": "# Self-Service Password Reset & Credential Recovery\n\nIf you have forgotten your master employee password or received an expired credential notice, follow this standard recovery protocol.\n\n## Step-by-Step Reset\n- Navigate to the **AccessHub Login Gateway**.\n- Click **Account Recovery / Self-Service Reset**.\n- Enter your primary work email (`employee1@accesshub.local`).\n- Enter the one-time verification token dispatched via secondary email or SMS.\n- Choose a new password meeting our enterprise complexity requirements:\n  - Minimum 12 characters\n  - At least one uppercase letter, one digit, and one special character\n\n*Note: Passwords expire every 90 days in accordance with SOC-2 guidelines.*"
+    },
+    {
+      "id": "KB-103",
+      "title": "Remote Work & Distributed Security Guidelines",
+      "category": "Internal Policies",
+      "author": "Sarah Jenkins",
+      "lastUpdated": "2024-10-12",
+      "summary": "Mandatory information security standards for telecommuting and working from non-corporate facilities.",
+      "content": "# Remote Work & Distributed Security Guidelines\n\nThis document outlines mandatory protocols for personnel accessing enterprise assets remotely.\n\n### Core Security Principles\n1. **Device Security**: Only enterprise-managed hardware with active disk encryption may process confidential data.\n2. **Network Hygiene**: Avoid public unencrypted Wi-Fi networks without active VPN tunnel encapsulation.\n3. **Screen Privacy**: Ensure privacy filters are utilized when working in public spaces or transit hubs.\n\n> All remote endpoints must maintain automated endpoint detection (EDR) agent synchronization."
+    },
+    {
+      "id": "KB-104",
+      "title": "Corporate Data Handling & Classification Standard",
+      "category": "Compliance",
+      "author": "James Thornton",
+      "lastUpdated": "2024-10-05",
+      "summary": "Enterprise data classification tiers: Public, Internal, Confidential, and Restricted.",
+      "content": "# Corporate Data Handling & Classification Standard\n\nData integrity is foundational to AccessHub. All enterprise data is categorized under four distinct security classifications:\n\n- **Public**: Freely distributable marketing and product documentation.\n- **Internal**: Standard operational materials for internal employee reference.\n- **Confidential**: Financial ledgers, customer contracts, and personnel audit logs.\n- **Restricted**: Cryptographic keys, credentials, and source identity records.\n\nFor full audit compliance matrices, review the [Documents & Policy](#/documents) registry."
+    }
+  ],
+  "announcements": [
+    {
+      "id": "ANN-001",
+      "title": "Q3 All-Hands — September 30",
+      "category": "Company",
+      "priority": "high",
+      "author": "Marcus Vance",
+      "authorId": 1,
+      "publishedAt": "2026-09-18T09:00:00.000Z",
+      "content": "Join us for the Q3 All-Hands on September 30 at 10:00 AM PT. We will cover company performance highlights, product roadmap updates, and open Q&A with the leadership team. Zoom link will be distributed via calendar invite."
+    },
+    {
+      "id": "ANN-002",
+      "title": "Updated Remote Work Policy — Effective October 1",
+      "category": "People Ops",
+      "priority": "normal",
+      "author": "Chloe Bennett",
+      "authorId": 106,
+      "publishedAt": "2026-09-15T14:00:00.000Z",
+      "content": "Effective October 1, the remote work eligibility window is extended to 4 days per week for all employees with manager approval. Full policy details are available in the Knowledge Base. Please review and acknowledge receipt before September 28."
+    },
+    {
+      "id": "ANN-003",
+      "title": "Security Awareness Training — Mandatory Completion by Oct 15",
+      "category": "Security",
+      "priority": "high",
+      "author": "Security Team",
+      "authorId": 1,
+      "publishedAt": "2026-09-12T10:00:00.000Z",
+      "content": "All employees are required to complete the annual Security Awareness Training module by October 15. The training covers phishing awareness, data handling, and incident response procedures. Access the module via the Learning Portal link in your email."
+    }
+  ]
 }
