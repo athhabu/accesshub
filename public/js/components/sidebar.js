@@ -80,10 +80,10 @@ const SidebarComponent = {
     }).join('');
 
     return `
-      <aside class="fixed left-0 top-0 h-full w-64 bg-surface-container-lowest border-r border-outline-variant/30 z-50 flex flex-col justify-between shadow-[0_1px_8px_rgba(0,0,0,0.04)]">
-        <div class="flex flex-col">
+      <aside class="fixed left-0 top-0 h-screen w-64 bg-surface-container-lowest border-r border-outline-variant/30 z-50 flex flex-col justify-between shadow-[0_1px_8px_rgba(0,0,0,0.04)]">
+        <div class="flex flex-col flex-1 min-h-0">
           <!-- Logo & Brand -->
-          <div class="h-16 px-space-md flex items-center justify-between border-b border-outline-variant/20">
+          <div class="h-16 px-space-md flex items-center justify-between border-b border-outline-variant/20 shrink-0">
             <a href="#/dashboard" class="flex items-center gap-space-sm">
               <div class="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-on-primary shadow-sm">
                 <svg class="w-5 h-5 text-white" fill="none" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
@@ -101,19 +101,22 @@ const SidebarComponent = {
             ` : ''}
           </div>
 
-          <!-- Section Label -->
-          <div class="px-space-md pt-space-md pb-space-xs">
-            <span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant font-semibold">Menu</span>
-          </div>
+          <!-- Scrollable Menu Section -->
+          <div class="flex-1 min-h-0 overflow-y-auto py-2">
+            <!-- Section Label -->
+            <div class="px-space-md pt-1 pb-space-xs">
+              <span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant font-semibold">Menu</span>
+            </div>
 
-          <!-- Navigation Links -->
-          <nav class="flex flex-col gap-1 px-space-sm" id="sidebar-nav">
-            ${navLinksHtml}
-          </nav>
+            <!-- Navigation Links -->
+            <nav class="flex flex-col gap-1 px-space-sm pb-2" id="sidebar-nav">
+              ${navLinksHtml}
+            </nav>
+          </div>
         </div>
 
         <!-- Sidebar Footer -->
-        <div class="p-space-sm border-t border-outline-variant/20 flex flex-col gap-1">
+        <div class="p-space-sm border-t border-outline-variant/20 flex flex-col gap-1 shrink-0 bg-surface-container-lowest">
           <a class="flex items-center gap-3 px-3 py-2 rounded-lg font-label-lg text-label-lg ${currentPath === 'knowledge-base' ? 'bg-surface-container text-primary font-semibold' : 'text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface'} transition-colors" href="#/knowledge-base">
             <span class="material-symbols-outlined text-[20px]">help_center</span>
             <span>Quick Help &amp; Docs</span>
